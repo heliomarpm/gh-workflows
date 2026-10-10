@@ -1,4 +1,4 @@
-name: "3. Changelog"
+name: "Changelog Generator"
 
 on:
   push:
@@ -17,7 +17,7 @@ on:
 
 jobs:
   changelog:
-    name: 📝 Update Changelog
+    # name: 📝 Update Changelog
     runs-on: ubuntu-latest
     permissions:
       contents: write

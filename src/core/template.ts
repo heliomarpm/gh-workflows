@@ -44,6 +44,9 @@ export const template = {
 					logger.warning(`Erro ao ler template em '${p}': ${err}`);
 				}
 			}
+			else {
+				logger.debug(`Template '${templateRelativePath}' não encontrado em '${p}'`);
+			}
 		}
 
 		if (fallbackContent) {
