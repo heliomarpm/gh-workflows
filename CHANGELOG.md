@@ -11,6 +11,7 @@ O formato é baseado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.
 - **changelog:** ✨ adicionar GitHub Action para geração de changelog ([1bde1f9](https://github.com/heliomarpm/gh-workflows/commit/1bde1f92f5e6eb88cb96ef7d7adb0f9cc269057e))
 
 ### 🐛 Bug Fixes
+- **changelog:** 🐛 corrige workflow de changelog ([0193d87](https://github.com/heliomarpm/gh-workflows/commit/0193d87aa1054f1792c5e391aeca80868d85003c))
 - **changelog:** 🐛 corrige workflow de changelog ([8e2a47f](https://github.com/heliomarpm/gh-workflows/commit/8e2a47f1ccea3fbdcef111fc3032e1d178a9014b))
 - **changelog:** 🐛 corrige workflow de changelog ([63abedd](https://github.com/heliomarpm/gh-workflows/commit/63abedd6e86ea4184042e14d5159774acbd3e170))
 - **changelog:** 🐛 corrige workflow de changelog ([b263eb4](https://github.com/heliomarpm/gh-workflows/commit/b263eb4e225299d04066f00cfdd675726a9de306))
