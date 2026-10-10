@@ -13,11 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/heliomarpm/gh-workflows.git"
   },
-  "keywords": [
-    "github-actions",
-    "ci-cd",
-    "reusable-workflows"
-  ],
+  "keywords": ["github-actions", "ci-cd", "reusable-workflows"],
   "license": "MIT",
   "scripts": {
     "ncu": "npx npm-check-updates -u",

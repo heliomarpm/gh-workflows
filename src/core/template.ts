@@ -2,6 +2,8 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { logger } from './index.js';
 
+const _dirname = __dirname; // path.resolve(__dirname, '../core');
+
 export const template = {
 	render(templateContent: string, data: Record<string, string | number | boolean | undefined | null>): string {
 		let rendered = templateContent;
@@ -29,8 +31,8 @@ export const template = {
 	loadAndRender(templateRelativePath: string, data: Record<string, string | number | boolean | undefined | null>, fallbackContent?: string): string {
 		// Procura o template relativo ao root do repositório
 		const possiblePaths = [
-			path.resolve(__dirname, '../../templates', templateRelativePath),
-			path.resolve(__dirname, '../templates', templateRelativePath),
+			path.resolve(_dirname, '../../templates', templateRelativePath),
+			path.resolve(_dirname, '../templates', templateRelativePath),
 			path.resolve(process.cwd(), 'templates', templateRelativePath),
 			path.resolve(process.cwd(), templateRelativePath),
 		];
@@ -52,5 +54,5 @@ export const template = {
 
 		logger.warning(`Template '${templateRelativePath}' não encontrado em nenhum caminho esperado.`);
 		return '';
-	}
-}
+	},
+};

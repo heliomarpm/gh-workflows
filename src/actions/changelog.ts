@@ -195,7 +195,10 @@ export const changelog = {
 					SINCE_LABEL: latestTag || 'início do histórico',
 				});
 				if (summaryContent) {
-					logger.summary.addRaw(summaryContent).write().catch(() => { });
+					logger.summary
+						.addRaw(summaryContent)
+						.write()
+						.catch(() => {});
 				}
 			}
 			return {
@@ -246,7 +249,10 @@ export const changelog = {
 				CHANGELOG_NOTES: releaseNotes,
 			});
 			if (summaryContent) {
-				logger.summary.addRaw(summaryContent).write().catch(() => { });
+				logger.summary
+					.addRaw(summaryContent)
+					.write()
+					.catch(() => {});
 			}
 		}
 
@@ -287,8 +293,8 @@ export const changelog = {
 			logger.setFailed(`Falha ao gerar Changelog: ${message}`);
 			process.exit(1);
 		}
-	}
-}
+	},
+};
 
 if (process.env.NODE_ENV !== 'test') {
 	changelog.run();
