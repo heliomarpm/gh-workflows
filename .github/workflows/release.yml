@@ -6,6 +6,11 @@ on:
       - main
       - develop
   workflow_dispatch:
+    inputs:
+      enable-changelog:
+        description: 'Habilita a criação do changelog'
+        required: false
+        default: 'true'
 
 jobs:
   release:
@@ -23,16 +28,18 @@ jobs:
 
       - name: 🚀 Create Git Tag & Release
         id: release
-        uses: ./actions/release        
+        uses: ./actions/release
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 📝 Update Changelog
+        if: ${{ inputs.enable-changelog != false }}
         uses: ./actions/changelog
         with:
           version: ${{ steps.release.outputs.version}}
           release-notes: ${{ steps.release.outputs.release-notes}}
-          # github-token: ${{ secrets.GITHUB_TOKEN }}
+          enable-changelog: ${{ inputs.enable-changelog != false }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🧾 Job Summary (Fallback em Falha)
         if: failure()

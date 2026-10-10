@@ -1,36 +1,36 @@
-# name: "Changelog Generator"
+name: "Changelog Generator"
 
-# on:
-#   push:
-#     branches:
-#       - main
-#       - develop
-#     paths-ignore:
-#       - '**/CHANGELOG.md'
-#   workflow_dispatch:
-#     inputs:
-#       version:
-#         description: 'Versão do changelog (ex: 1.0.0, 2026-10-03, ou Unreleased)'
-#         type: string
-#         required: false
-#         default: ''
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths-ignore:
+      - '**/CHANGELOG.md'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Versão do changelog (ex: 1.0.0, 2026-10-03, ou Unreleased)'
+        type: string
+        required: false
+        default: ''
 
-# jobs:
-#   changelog:
-#     # name: 📝 Update Changelog
-#     runs-on: ubuntu-latest
-#     permissions:
-#       contents: write
+jobs:
+  changelog:
+    # name: 📝 Update Changelog
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
-#     steps:
-#       - name: 📌 Checkout repository
-#         uses: actions/checkout@v7
-#         with:
-#           fetch-depth: 0
-#           token: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: 📌 Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-#       - name: 📝 Update Changelog
-#         uses: ./actions/changelog
-#         with:
-#           version: ${{ inputs.version || ''}}
-#           # github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: 📝 Update Changelog
+        uses: ./actions/changelog
+        with:
+          version: ${{ inputs.version || ''}}
+          # github-token: ${{ secrets.GITHUB_TOKEN }}
