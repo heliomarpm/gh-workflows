@@ -7,6 +7,16 @@ O formato é baseado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.
 ## [Unreleased]
 
 ### 🚀 Features
+- **release:** 🚀 implementar fluxo de release automatizado ([f67c11d](https://github.com/heliomarpm/gh-workflows/commit/f67c11de2456708ff4d2a5c5856bc8c2e34ed402))
+
+### 🐛 Bug Fixes
+- **release:** 🐛 corrigi fluxo de release automatizado ([5bd5302](https://github.com/heliomarpm/gh-workflows/commit/5bd530238f287648c8851ac2c562537044ae7df0))
+- **release:** 🐛 corrigi fluxo de release automatizado ([e81fb97](https://github.com/heliomarpm/gh-workflows/commit/e81fb9750cbcc87fbd890d707e34a8eb3887ab67))
+- **release:** 🐛 corrigi fluxo de release automatizado ([f2e0f67](https://github.com/heliomarpm/gh-workflows/commit/f2e0f67a7dec9ae208b2cbbbee0463d5ec7acf68))
+
+## [Unreleased]
+
+### 🚀 Features
 - **changelog:** ✨ adicionar arquivos de changelog ([f3136ed](https://github.com/heliomarpm/gh-workflows/commit/f3136ed952df28cf07c51db0a9d8aa4a30445f01))
 - **changelog:** ✨ adicionar GitHub Action para geração de changelog ([1bde1f9](https://github.com/heliomarpm/gh-workflows/commit/1bde1f92f5e6eb88cb96ef7d7adb0f9cc269057e))
 
