@@ -29,10 +29,10 @@ export const template = {
 	loadAndRender(templateRelativePath: string, data: Record<string, string | number | boolean | undefined | null>, fallbackContent?: string): string {
 		// Procura o template relativo ao root do repositório
 		const possiblePaths = [
-			path.resolve(process.cwd(), '../../templates', templateRelativePath),
-			path.resolve(process.cwd(), '../templates', templateRelativePath),
-			path.resolve(process.cwd(), 'templates', templateRelativePath),
 			path.resolve(process.cwd(), templateRelativePath),
+			path.resolve(process.cwd(), 'templates', templateRelativePath),
+			path.resolve(process.cwd(), '../templates', templateRelativePath),
+			path.resolve(process.cwd(), '../../templates', templateRelativePath),
 		];
 
 		for (const p of possiblePaths) {
