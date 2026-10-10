@@ -34,10 +34,6 @@ inputs:
     description: 'Prefixo a ser adicionado à versão (padrão: "v")'
     required: false
     default: 'v'
-  # enable-changelog: 
-  #   description: 'Habilita a geração de changelog e release notes'
-  #   required: false
-  #   default: 'true'
   release-notes:
     description: 'Notas de release pré-geradas (ex: vindas do changelog). Se vazio, gera automaticamente a partir dos commits'
     required: false

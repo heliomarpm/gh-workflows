@@ -25,16 +25,19 @@
     "check:fix": "biome check --write",
     "test": "vitest run",
     "build:changelog": "ncc build src/actions/changelog.ts -o dist/changelog --minify --source-map",
-    "build": "npm run build:changelog"
+    "build:release": "ncc build src/actions/release.ts -o dist/release --minify --source-map",
+    "build": "npm run build:changelog && npm run build:release"
   },
   "dependencies": {
     "@actions/core": "^3.0.1",
     "@actions/exec": "^3.0.0",
-    "@actions/github": "^9.1.1"
+    "@actions/github": "^9.1.1",
+    "semver": "^7.8.5"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
     "@types/node": "^26.6.5",
+    "@types/semver": "^7.8.0",
     "@vercel/ncc": "^0.45.0",
     "typescript": "^5.9.3",
     "vitest": "^5.0.3"

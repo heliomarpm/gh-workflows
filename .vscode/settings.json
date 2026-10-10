@@ -9,7 +9,7 @@
     "source.fixAll.biome": "always",
     "source.fixAll.stylelint": "always",
     "source.organizeImports.biome": "explicit",
-    "source.sort.json": "explicit",
+    "source.sort.json": "never",
     "source.sortAndRemoveImports": "explicit"
   },
   "editor.rulers": [160],
