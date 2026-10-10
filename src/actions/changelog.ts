@@ -187,13 +187,20 @@ export const changelog = {
 		if (!hasChanges) {
 			logger.info('ℹ️ Nenhuma alteração detectada. O CHANGELOG.md já está atualizado.');
 			if (process.env.GITHUB_STEP_SUMMARY) {
-				const summaryContent = template.loadAndRender('summary-changelog-skipped.md', {
-					CHANGELOG_FILE: changelogFileName,
-					CURRENT_BRANCH: currentBranch,
-					MODE: currentBranch,
-					COMMITS_COUNT: parsedCommits.length,
-					SINCE_LABEL: latestTag || 'início do histórico',
-				});
+				const fallbackSkipped =
+					'## ℹ️ Changelog: Nenhuma Nova Alteração\n\n| | |\n| --- | --- |\n| **Status** | ⚪ **Changelog Atualizado (Sem alterações)** |\n| **Arquivo** | `{{CHANGELOG_FILE}}` |\n| **Branch** | `{{CURRENT_BRANCH}}` |\n| **Modo** | `{{MODE}}` |\n| **Commits Analisados** | {{COMMITS_COUNT}} |\n\n> [!NOTE]\n> Nenhum novo commit relevante foi encontrado desde {{SINCE_LABEL}}.\n';
+
+				const summaryContent = template.loadAndRender(
+					'summary-changelog-skipped.md',
+					{
+						CHANGELOG_FILE: changelogFileName,
+						CURRENT_BRANCH: currentBranch,
+						MODE: currentBranch,
+						COMMITS_COUNT: parsedCommits.length,
+						SINCE_LABEL: latestTag || 'início do histórico',
+					},
+					fallbackSkipped
+				);
 				if (summaryContent) {
 					logger.summary
 						.addRaw(summaryContent)
@@ -240,14 +247,21 @@ export const changelog = {
 		}
 
 		if (process.env.GITHUB_STEP_SUMMARY) {
-			const summaryContent = template.loadAndRender('summary-changelog.md', {
-				CHANGELOG_FILE: changelogFileName,
-				VERSION: targetVersion,
-				MODE: currentBranch,
-				CURRENT_BRANCH: currentBranch,
-				COMMITS_COUNT: parsedCommits.length,
-				CHANGELOG_NOTES: releaseNotes,
-			});
+			const fallbackSummary =
+				'## 📦 Changelog Atualizado\n\n| | |\n| --- | --- |\n| **Status** | 🟢 **Atualizado com Sucesso** |\n| **Arquivo** | `{{CHANGELOG_FILE}}` |\n| **Versão / Seção** | `{{VERSION}}` |\n| **Modo** | `{{MODE}}` |\n| **Branch** | `{{CURRENT_BRANCH}}` |\n| **Commits Analisados** | {{COMMITS_COUNT}} |\n\n{{CHANGELOG_NOTES}}\n';
+
+			const summaryContent = template.loadAndRender(
+				'summary-changelog.md',
+				{
+					CHANGELOG_FILE: changelogFileName,
+					VERSION: targetVersion,
+					MODE: currentBranch,
+					CURRENT_BRANCH: currentBranch,
+					COMMITS_COUNT: parsedCommits.length,
+					CHANGELOG_NOTES: releaseNotes,
+				},
+				fallbackSummary
+			);
 			if (summaryContent) {
 				logger.summary
 					.addRaw(summaryContent)

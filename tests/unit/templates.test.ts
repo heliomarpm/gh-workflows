@@ -25,7 +25,7 @@ describe('template.render', () => {
 	it('trata valores vazios e nulos com string vazia', () => {
 		const msg = 'Item: [{{VAL}}]';
 		const result = template.render(msg, { VAL: undefined });
-		
+
 		expect(result).toBe('Item: []');
 	});
 });

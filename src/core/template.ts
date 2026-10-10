@@ -1,5 +1,6 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { logger } from './index.js';
 
 export const template = {
@@ -27,25 +28,26 @@ export const template = {
 	},
 
 	loadAndRender(templateRelativePath: string, data: Record<string, string | number | boolean | undefined | null>, fallbackContent?: string): string {
-		// Procura o template relativo ao root do repositório
+		// No ESM nativo, resolvemos o diretório atual usando import.meta.url
+		const currentDir = path.dirname(fileURLToPath(import.meta.url));
+		const bundledTemplatesDir = path.join(currentDir, 'templates');
+		const cwdTemplatesDir = path.resolve(process.cwd(), 'templates');
+
 		const possiblePaths = [
+			path.join(bundledTemplatesDir, templateRelativePath),
+			path.join(cwdTemplatesDir, templateRelativePath),
 			path.resolve(process.cwd(), templateRelativePath),
-			path.resolve(process.cwd(), 'templates', templateRelativePath),
-			path.resolve(process.cwd(), '../templates', templateRelativePath),
-			path.resolve(process.cwd(), '../../templates', templateRelativePath),
 		];
 
 		for (const p of possiblePaths) {
-			if (fs.existsSync(p)) {
-				try {
+			try {
+				if (fs.existsSync(p) && fs.statSync(p).isFile()) {
 					const content = fs.readFileSync(p, 'utf-8');
 					return this.render(content, data);
-				} catch (err) {
-					logger.warning(`Erro ao ler template em '${p}': ${err}`);
 				}
-			}
-			else {
 				logger.debug(`Template '${templateRelativePath}' não encontrado em '${p}'`);
+			} catch (err) {
+				logger.warning(`Erro ao ler template em '${p}': ${err}`);
 			}
 		}
 
