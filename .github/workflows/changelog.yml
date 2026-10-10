@@ -1,12 +1,23 @@
 name: "Changelog Generator"
 
 on:
-  push:
-    branches:
-      - main
-      - develop
+  workflow_run:
+    workflows: ["CI - Engine Test & Build Suite"]
+    branches: ["main", "develop"]
     paths-ignore:
       - '**/CHANGELOG.md'
+    types:
+      - completed
+  # push:
+  #   branches:
+  #     - main
+  #     - develop
+  # push:
+  #   branches:
+  #     - main
+  #     - develop
+  #   paths-ignore:
+  #     - '**/CHANGELOG.md'
   workflow_dispatch:
     inputs:
       version:

@@ -36,7 +36,8 @@ inputs:
   enable-changelog:
     description: 'Habilita a criação do changelog'
     required: false
-    default: 'true'
+    type: boolean
+    default: true
   # github-token:
   #   description: 'Token do GitHub para push do commit do changelog'
   #   required: false

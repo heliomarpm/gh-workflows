@@ -21,7 +21,8 @@ inputs:
   prerelease-incremental:
     description: 'Se deve gerar tags incrementais de pré-release (ex: v1.0.0-rc.1) ou manter a mesma tag (v1.0.0)'
     required: false
-    default: 'true'
+    type: boolean
+    default: true
   prerelease-suffix:
     description: 'Sufixo da tag de pré-release quando prerelease-incremental estiver ativo (padrão: "rc")'
     required: false
