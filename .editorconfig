@@ -20,7 +20,7 @@ indent_style = tab
 max_line_length = off
 trim_trailing_whitespace = false
 
-{*.{json,yml,yaml,cff}}
+[*.{json,yml,yaml,cff}]
 indent_size = 2
 indent_style = space
 insert_final_newline = true

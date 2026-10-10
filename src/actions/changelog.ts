@@ -291,5 +291,5 @@ export const changelog = {
 }
 
 if (process.env.NODE_ENV !== 'test') {
-	Changelog.run();
+	changelog.run();
 }

@@ -8,6 +8,12 @@ on:
     paths-ignore:
       - '**/CHANGELOG.md'
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Versão do changelog (ex: 1.0.0, 2026-10-03, ou Unreleased)'
+        type: string
+        required: false
+        default: ''
 
 jobs:
   changelog:
@@ -24,6 +30,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 📝 Update Changelog
-        uses: ./actions/changelog@main
+        uses: ./actions/changelog
         with:
+          version: ${{ inputs.version || ''}}
           github-token: ${{ secrets.GITHUB_TOKEN }}

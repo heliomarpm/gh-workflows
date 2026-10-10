@@ -27,27 +27,11 @@ inputs:
     description: 'Versão do changelog (ex: 1.0.0, 2026-10-03, ou Unreleased)'
     required: false
     default: ''
-#   session-title:
-#     description: 'Título da sessão de changelog (ex: "v%major.%minor.%patch", "%YYYY-%mm-%dd")'
-#     required: false
-#     default: ''
 
   branch:
     description: 'Nome do branch atual (detectado automaticamente pelo ambiente/git se vazio)'
     required: false
     default: ''
-#   release-branches:
-#     description: 'Lista separada por vírgulas de branches de release (ex: main,master)'
-#     required: false
-#     default: 'main,master'
-#   develop-branches:
-#     description: 'Lista separada por vírgulas de branches de desenvolvimento (ex: develop,dev)'
-#     required: false
-#     default: 'develop,dev'
-#   prerelease-branches:
-#     description: 'Lista de padrões glob separados por vírgulas para branches de pré-release (ex: "release-*,release/*")'
-#     required: false
-#     default: 'release-*,release/*'
 
   enable-changelog:
     description: 'Se deve habilitar a geração e commit do changelog'
