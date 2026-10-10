@@ -102,5 +102,5 @@ export const commits = {
 		}
 
 		return lines.join('\n').trim();
-	}
-}
+	},
+};

@@ -45,7 +45,19 @@ export const git = {
 			.filter((entry) => entry.length > 0);
 	},
 
+	async ensureIdentity(cwd?: string, name = 'github-actions[bot]', email = 'github-actions[bot]@users.noreply.github.com'): Promise<void> {
+		const nameRes = await runCommand('git', ['config', 'user.name'], { cwd, silent: true });
+		if (!nameRes.stdout || nameRes.stdout.trim() === '') {
+			await runCommand('git', ['config', 'user.name', name], { cwd, silent: true });
+		}
+		const emailRes = await runCommand('git', ['config', 'user.email'], { cwd, silent: true });
+		if (!emailRes.stdout || emailRes.stdout.trim() === '') {
+			await runCommand('git', ['config', 'user.email', email], { cwd, silent: true });
+		}
+	},
+
 	async createAnnotatedTag(tagName: string, message: string, cwd?: string): Promise<void> {
+		await this.ensureIdentity(cwd);
 		const res = await runCommand('git', ['tag', '-a', tagName, '-m', message], { cwd });
 		if (res.exitCode !== 0) {
 			throw new Error(`Falha ao criar tag git '${tagName}': ${res.stderr}`);
@@ -69,8 +81,7 @@ export const git = {
 	},
 
 	async commitAndPush(filePath: string, message: string, cwd?: string): Promise<boolean> {
-		await runCommand('git', ['config', 'user.name', 'github-actions[bot]'], { cwd, silent: true });
-		await runCommand('git', ['config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], { cwd, silent: true });
+		await this.ensureIdentity(cwd);
 
 		await runCommand('git', ['add', filePath], { cwd });
 		const hasDiff = await git.hasChanges(filePath, cwd);
