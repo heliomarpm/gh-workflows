@@ -1,0 +1,29 @@
+name: "3. Changelog"
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths-ignore:
+      - '**/CHANGELOG.md'
+  workflow_dispatch:
+
+jobs:
+  changelog:
+    name: 📝 Update Changelog
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 📌 Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 📝 Update Changelog
+        uses: ./actions/changelog@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

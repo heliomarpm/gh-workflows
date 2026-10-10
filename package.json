@@ -26,7 +26,10 @@
     "format": "biome format .",
     "format:fix": "biome format --write .",
     "check": "biome check",
-    "check:fix": "biome check --write"
+    "check:fix": "biome check --write",
+    "test": "vitest run",
+    "build:changelog": "ncc build src/actions/changelog.ts -o dist/changelog --minify --source-map",
+    "build": "npm run build:changelog"
   },
   "dependencies": {
     "@actions/core": "^3.0.1",

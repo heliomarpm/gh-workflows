@@ -1,0 +1,71 @@
+name: 'Changelog Engine'
+description: 'Gerador de changelog Conventional Commits com ciclo de vida [Unreleased]'
+
+inputs:
+  changelog-path:
+    description: 'Caminho para o arquivo de changelog'
+    required: false
+    default: '.'
+  changelog-file:
+    description: 'Caminho do arquivo de changelog'
+    required: false
+    default: 'CHANGELOG.md'
+  changelog-title:
+    description: 'Título do arquivo de changelog'
+    required: false
+    default: |
+      # 📦 Changelog
+
+      Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
+
+      O formato é baseado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
+  commit-message:
+    description: 'Mensagem de commit customizada para atualizações do changelog'
+    required: false
+    default: ''
+  version:
+    description: 'Versão do changelog (ex: 1.0.0, 2026-10-03, ou Unreleased)'
+    required: false
+    default: ''
+#   session-title:
+#     description: 'Título da sessão de changelog (ex: "v%major.%minor.%patch", "%YYYY-%mm-%dd")'
+#     required: false
+#     default: ''
+
+  branch:
+    description: 'Nome do branch atual (detectado automaticamente pelo ambiente/git se vazio)'
+    required: false
+    default: ''
+#   release-branches:
+#     description: 'Lista separada por vírgulas de branches de release (ex: main,master)'
+#     required: false
+#     default: 'main,master'
+#   develop-branches:
+#     description: 'Lista separada por vírgulas de branches de desenvolvimento (ex: develop,dev)'
+#     required: false
+#     default: 'develop,dev'
+#   prerelease-branches:
+#     description: 'Lista de padrões glob separados por vírgulas para branches de pré-release (ex: "release-*,release/*")'
+#     required: false
+#     default: 'release-*,release/*'
+
+  enable-changelog:
+    description: 'Se deve habilitar a geração e commit do changelog'
+    required: false
+    default: 'true'
+  github-token:
+    description: 'Token do GitHub para push do commit do changelog'
+    required: false
+    default: ''
+
+outputs:
+  version:
+    description: 'Versão aplicada (ex: 1.0.0, 2026-10-03, ou Unreleased)'
+  has-changes:
+    description: 'Se alterações foram detectadas e escritas (true/false)'
+  release-notes:
+    description: 'Notas de release em markdown geradas para este ciclo'
+
+runs:
+  using: 'node20'
+  main: '../../dist/changelog/index.js'
