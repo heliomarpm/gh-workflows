@@ -1,0 +1,43 @@
+{
+  "name": "gh-workflows",
+  "version": "0.0.1",
+  "description": "Reusable GitHub Actions and workflows built with TypeScript and Node.js",
+  "author": "Heliomar P. Marques",
+  "private": true,
+  "type": "module",
+  "homepage": "https://github.com/heliomarpm/gh-workflows#readme",
+  "bugs": {
+    "url": "https://github.com/heliomarpm/gh-workflows/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heliomarpm/gh-workflows.git"
+  },
+  "keywords": [
+    "github-actions",
+    "ci-cd",
+    "reusable-workflows"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "ncu": "npx npm-check-updates -u",
+    "lint": "biome lint",
+    "lint:fix": "biome lint --write",
+    "format": "biome format .",
+    "format:fix": "biome format --write .",
+    "check": "biome check",
+    "check:fix": "biome check --write"
+  },
+  "dependencies": {
+    "@actions/core": "^3.0.1",
+    "@actions/exec": "^3.0.0",
+    "@actions/github": "^9.1.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.15",
+    "@types/node": "^26.6.5",
+    "@vercel/ncc": "^0.45.0",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.3"
+  }
+}

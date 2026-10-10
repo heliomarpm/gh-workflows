@@ -1,8 +1,3 @@
 {
-  "recommendations": [
-    "biomejs.biome",
-    "editorconfig.editorconfig",
-    "usernamehw.errorlens",
-    "prettier.prettier-vscode"
-  ]
+  "recommendations": ["biomejs.biome", "editorconfig.editorconfig", "usernamehw.errorlens", "esbenp.prettier-vscode"]
 }
