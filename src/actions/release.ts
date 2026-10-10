@@ -1,10 +1,9 @@
 import * as path from 'node:path';
 import semver from 'semver';
 
-import { getGitHubClient, getRepoContext, git, logger, template } from '../core/index.js';
+import { commits, getGitHubClient, getRepoContext, git, io, logger, template } from '../core/index.js';
 
 import type { BumpType, ParsedCommit } from '../types/index.js';
-import { changelog } from './changelog.js';
 
 export interface ReleaseOptions {
 	projectPath?: string;
@@ -142,7 +141,7 @@ export const release = {
 				});
 
 				if (summary) {
-					logger.summary
+					io.summary
 						.addRaw(summary)
 						.write()
 						.catch(() => {});
@@ -155,7 +154,7 @@ export const release = {
 		logger.info(`🏷️ Última tag encontrada: ${latestTag || '(nenhuma)'}`);
 
 		const rawCommits = await git.getCommitsSince(latestTag, 'HEAD', cwd);
-		const commits = rawCommits.map(changelog.parseCommitLine).filter((c): c is ParsedCommit => c !== null);
+		const parsedCommits = rawCommits.map(commits.parseCommitLine).filter((c): c is ParsedCommit => c !== null);
 
 		let targetVersion = options.version?.trim();
 		let releaseNotes = options.releaseNotes?.trim() || '';
@@ -166,7 +165,7 @@ export const release = {
 		} else {
 			const analysis = this.calculateNextVersion(
 				latestTag,
-				commits,
+				parsedCommits,
 				mode,
 				options.versionPrefix,
 				options.prereleaseSuffix,
@@ -178,11 +177,11 @@ export const release = {
 					const skippedSummary = template.loadAndRender('summary-release-skipped.md', {
 						CURRENT_BRANCH: currentBranch,
 						LAST_TAG: latestTag || 'nenhuma',
-						COMMITS_COUNT: commits.length,
+						COMMITS_COUNT: parsedCommits.length,
 					});
 
 					if (skippedSummary) {
-						logger.summary
+						io.summary
 							.addRaw(skippedSummary)
 							.write()
 							.catch(() => {});
@@ -193,7 +192,7 @@ export const release = {
 			targetVersion = analysis.nextVersion;
 			if (!releaseNotes) {
 				const repoContext = process.env.GITHUB_REPOSITORY ? `https://github.com/${process.env.GITHUB_REPOSITORY}` : undefined;
-				releaseNotes = changelog.buildReleaseNotes(commits, repoContext);
+				releaseNotes = commits.buildReleaseNotes(parsedCommits, repoContext);
 			}
 		}
 
@@ -235,13 +234,13 @@ export const release = {
 				LAST_VERSION: latestTag || '(inicial)',
 				RELEASE_TYPE: mode,
 				CURRENT_BRANCH: currentBranch,
-				COMMIT: commits[0]?.shortHash || 'HEAD',
+				COMMIT: parsedCommits[0]?.shortHash || 'HEAD',
 				EXTRA_METADATA: '',
 				QUICK_LINKS: '',
 				RELEASE_NOTES: releaseNotes,
 			});
 			if (publishedSummary) {
-				logger.summary
+				io.summary
 					.addRaw(publishedSummary)
 					.write()
 					.catch(() => {});
@@ -258,16 +257,16 @@ export const release = {
 
 	async run(): Promise<void> {
 		try {
-			const projectPath = logger.getInput('project-path') || '.';
-			const releaseBranches = logger.getInput('main-branch') || 'main,master';
-			const developBranches = logger.getInput('develop-branch') || 'develop,dev,desenv';
-			const prereleaseBranches = logger.getInput('prerelease-branch') || 'release-*,release/*';
-			const prereleaseIncremental = logger.getBooleanInput('prerelease-incremental');
-			const prereleaseSuffix = logger.getInput('prerelease-suffix') || 'rc';
-			const version = logger.getInput('version');
-			const versionPrefix = logger.getInput('version-prefix') || 'v';
-			const releaseNotes = logger.getInput('release-notes');
-			const githubToken = logger.getInput('github-token');
+			const projectPath = io.getInput('project-path') || '.';
+			const releaseBranches = io.getInput('main-branch') || 'main,master';
+			const developBranches = io.getInput('develop-branch') || 'develop,dev,desenv';
+			const prereleaseBranches = io.getInput('prerelease-branch') || 'release-*,release/*';
+			const prereleaseIncremental = io.getBooleanInput('prerelease-incremental');
+			const prereleaseSuffix = io.getInput('prerelease-suffix') || 'rc';
+			const version = io.getInput('version');
+			const versionPrefix = io.getInput('version-prefix') || 'v';
+			const releaseNotes = io.getInput('release-notes');
+			const githubToken = io.getInput('github-token');
 
 			const result = await this.createRelease({
 				projectPath,
@@ -282,18 +281,18 @@ export const release = {
 				githubToken,
 			});
 
-			logger.setOutput('version', result.version);
-			logger.setOutput('tag', result.tag);
-			logger.setOutput('has-changes', result.hasChanges.toString());
-			logger.setOutput('release-notes', result.releaseNotes);
+			io.setOutput('version', result.version);
+			io.setOutput('tag', result.tag);
+			io.setOutput('has-changes', result.hasChanges.toString());
+			io.setOutput('release-notes', result.releaseNotes);
 		} catch (err) {
 			const message = err instanceof Error ? err.message : String(err);
-			logger.setFailed(`Falha ao criar Release: ${message}`);
+			io.setFailed(`Falha ao criar Release: ${message}`);
 			process.exit(1);
 		}
 	},
 };
 
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test' && (!process.argv[1] || process.argv[1].includes('release'))) {
 	release.run();
 }

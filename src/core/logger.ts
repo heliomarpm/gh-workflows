@@ -28,23 +28,4 @@ export const logger = {
 	endGroup(): void {
 		core.endGroup();
 	},
-
-	setFailed(message: string): void {
-		core.setFailed(`🚨 ${message}`);
-	},
-
-	setOutput(name: string, value: unknown): void {
-		const stringValue = typeof value === 'string' ? value : JSON.stringify(value);
-		core.setOutput(name, stringValue);
-	},
-
-	getInput(name: string, options?: core.InputOptions): string {
-		return core.getInput(name, options);
-	},
-
-	getBooleanInput(name: string, options?: core.InputOptions): boolean {
-		return core.getBooleanInput(name, options);
-	},
-
-	summary: core.summary,
 };
