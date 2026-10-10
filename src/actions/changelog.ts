@@ -19,7 +19,7 @@ export interface ChangelogOptions {
 	version?: string;
 
 	enableChangelog?: boolean;
-	githubToken?: string;
+	// githubToken?: string;
 }
 
 const SECTION_HEADERS: { type: string; title: string; regex: RegExp }[] = [
@@ -286,7 +286,7 @@ export const changelog = {
 			const version = logger.getInput('version');
 			const enableChangelog = logger.getBooleanInput('enable-changelog');
 			const commitMessage = logger.getInput('commit-message');
-			const githubToken = logger.getInput('github-token');
+			// const githubToken = logger.getInput('github-token');
 
 			const result = await this.generate({
 				changelogPath,
@@ -296,7 +296,7 @@ export const changelog = {
 				version,
 				enableChangelog,
 				commitMessage,
-				githubToken,
+				// githubToken,
 			});
 
 			logger.setOutput('version', result.version);

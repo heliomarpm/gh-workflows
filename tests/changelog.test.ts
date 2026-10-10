@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { changelog } from '../../src/actions/changelog.js';
+import { changelog } from '../src/actions/changelog.js';
 
 describe('changelog action', () => {
 	describe('parseCommitLine', () => {

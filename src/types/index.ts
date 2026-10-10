@@ -1,3 +1,5 @@
+export type BumpType = 'major' | 'minor' | 'patch' | 'none';
+
 export interface ParsedCommit {
 	hash: string;
 	shortHash: string;

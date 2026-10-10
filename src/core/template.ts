@@ -30,12 +30,19 @@ export const template = {
 	loadAndRender(templateRelativePath: string, data: Record<string, string | number | boolean | undefined | null>, fallbackContent?: string): string {
 		// No ESM nativo, resolvemos o diretório atual usando import.meta.url
 		const currentDir = path.dirname(fileURLToPath(import.meta.url));
-		const bundledTemplatesDir = path.join(currentDir, 'templates');
-		const cwdTemplatesDir = path.resolve(process.cwd(), 'templates');
+		const repoRoot = path.resolve(currentDir, '..', '..');
+		const templatesDirName = String('templates'); //String('templates') para evitar que o @vercel/ncc duplique a pasta para cada dist/<action> no build.
+		const repoTemplatesDir = path.join(repoRoot, templatesDirName);
+		const cwdTemplatesDir = path.join(process.cwd(), templatesDirName);
 
 		const possiblePaths = [
-			path.join(bundledTemplatesDir, templateRelativePath),
+			// 1. templates/ na raiz do repositório da action
+			path.join(repoTemplatesDir, templateRelativePath),
+			// 2. Se executando no runner do GitHub Actions via GITHUB_ACTION_PATH (aponta para actions/<action>)
+			...(process.env.GITHUB_ACTION_PATH ? [path.resolve(process.env.GITHUB_ACTION_PATH, '..', '..', templatesDirName, templateRelativePath)] : []),
+			// 3. templates/ no repositório do chamador (para permitir customização/override)
 			path.join(cwdTemplatesDir, templateRelativePath),
+			// 4. Caminho relativo direto a partir do cwd
 			path.resolve(process.cwd(), templateRelativePath),
 		];
 

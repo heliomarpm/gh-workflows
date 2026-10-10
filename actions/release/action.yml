@@ -1,0 +1,62 @@
+name: 'Release Engine'
+description: 'Gerador de Git Tags e GitHub Releases baseado em Conventional Commits'
+
+inputs:
+  project-path:
+    description: 'Caminho do diretório raiz do projeto contendo o repositório git'
+    required: false
+    default: '.'
+  main-branch:
+    description: 'Branch principal de release (ex: main, master)'
+    required: false
+    default: 'main'
+  develop-branch:
+    description: 'Branch de desenvolvimento (ex: develop, dev)'
+    required: false
+    default: 'develop'
+  prerelease-branch:
+    description: 'Padrão de branch de pré-release (ex: "release-*", "release/*")'
+    required: false
+    default: 'release-*'
+  prerelease-incremental:
+    description: 'Se deve gerar tags incrementais de pré-release (ex: v1.0.0-rc.1) ou manter a mesma tag (v1.0.0)'
+    required: false
+    default: 'true'
+  prerelease-suffix:
+    description: 'Sufixo da tag de pré-release quando prerelease-incremental estiver ativo (padrão: "rc")'
+    required: false
+    default: 'rc'
+  version:
+    description: 'Versão explícita informada manualmente ou repassada pela etapa de changelog'
+    required: false
+    default: ''
+  version-prefix:
+    description: 'Prefixo a ser adicionado à versão (padrão: "v")'
+    required: false
+    default: 'v'
+  # enable-changelog: 
+  #   description: 'Habilita a geração de changelog e release notes'
+  #   required: false
+  #   default: 'true'
+  release-notes:
+    description: 'Notas de release pré-geradas (ex: vindas do changelog). Se vazio, gera automaticamente a partir dos commits'
+    required: false
+    default: ''
+  github-token:
+    description: 'Token do GitHub para criação e envio de tags e GitHub Releases'
+    required: false
+    default: ''
+
+outputs:
+  version:
+    description: 'Versão aplicada (ex: 1.0.0, 1.0.0-rc.1)'
+  tag:
+    description: 'Git Tag criada (ex: v1.0.0, v1.0.0-rc.1)'
+  has-changes:
+    description: 'Se alterações/commits foram detectados para release (true/false)'
+  release-notes:
+    description: 'Notas de release em markdown geradas para este ciclo'
+
+runs:
+  using: 'node24'
+  main: '../../dist/release/index.js'

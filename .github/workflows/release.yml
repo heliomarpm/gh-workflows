@@ -1,0 +1,46 @@
+name: "Release Generator"
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: 🚀 Release & Changelog
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 📌 Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🚀 Create Git Tag & Release
+        id: release
+        uses: ./actions/release        
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 📝 Update Changelog
+        uses: ./actions/changelog
+        with:
+          version: ${{ steps.release.outputs.version}}
+          release-notes: ${{ steps.release.outputs.release-notes}}
+          # github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🧾 Job Summary (Fallback em Falha)
+        if: failure()
+        run: |
+          {
+            echo "## ❌ Falha no Workflow de Release"
+            echo ""
+            echo "- **Branch:** \`${{ github.ref_name }}\`"
+            echo "- **Status:** Ocorreu um erro durante a execução da pipeline de release."
+            echo "- Verifique os logs das etapas anteriores para detalhes do erro."
+          } >> "$GITHUB_STEP_SUMMARY"
