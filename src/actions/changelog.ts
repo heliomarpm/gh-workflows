@@ -28,21 +28,35 @@ export const changelog = {
 	updateContent(currentChangelog: string, newSectionTitle: string, newSectionNotes: string): string {
 		const newBlock = `## [${newSectionTitle}]\n\n${newSectionNotes}`.trim();
 
-		// 1. Se já existe uma seção [Unreleased], substitui ela
-		const unreleasedRegex = /^##\s+\[Unreleased\][\s\S]*?(?=\n##\s+\[|Z)/m;
-		if (unreleasedRegex.test(currentChangelog)) {
-			return currentChangelog.replace(unreleasedRegex, `${newBlock}\n`);
+		// 1. Se a seção exata ou versão já existe (ex: [Unreleased] ou [v1.0.0] ou [v1.0.0 - 2026-10-11]), substitui ela diretamente
+		const rawVersion = newSectionTitle.split(' - ')[0].trim();
+		const escapedRawVersion = rawVersion.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+		const exactSectionRegex = new RegExp(`(^|\\n)##\\s+\\[${escapedRawVersion}(?:\\s+-\\s+[^\\]]+)?\\][\\s\\S]*?(?=\\n##\\s+\\[|$)`, 'i');
+
+		if (exactSectionRegex.test(currentChangelog)) {
+			return currentChangelog.replace(exactSectionRegex, (_match, prefix) => {
+				return `${prefix}${newBlock}\n`;
+			});
 		}
 
-		// 2. Se existem seções de versão anteriores, insere antes da primeira versão
-		const firstVersionMatch = currentChangelog.match(/^##\s+\[/m);
+		// 2. Se for uma release de nova versão e existir uma seção [Unreleased], promove [Unreleased] para a nova versão
+		const unreleasedRegex = /(^|\n)##\s+\[Unreleased\][\s\S]*?(?=\n##\s+\[|$)/i;
+		if (unreleasedRegex.test(currentChangelog)) {
+			return currentChangelog.replace(unreleasedRegex, (_match, prefix) => {
+				return `${prefix}${newBlock}\n`;
+			});
+		}
+
+		// 3. Se existem outras seções de versão anteriores, insere antes da primeira versão
+		const firstVersionMatch = currentChangelog.match(/(?:^|\n)(##\s+\[[\s\S]*)/);
 		if (firstVersionMatch && firstVersionMatch.index !== undefined) {
-			const before = currentChangelog.slice(0, firstVersionMatch.index).trim();
-			const after = currentChangelog.slice(firstVersionMatch.index).trim();
+			const matchStart = firstVersionMatch.index + (firstVersionMatch[0].startsWith('\n') ? 1 : 0);
+			const before = currentChangelog.slice(0, matchStart).trim();
+			const after = currentChangelog.slice(matchStart).trim();
 			return `${before}\n\n${newBlock}\n\n${after}\n`;
 		}
 
-		// 3. Changelog inicial, insere no final
+		// 4. Changelog inicial sem seções prévias, insere no final
 		return `${currentChangelog.trim()}\n\n${newBlock}\n`;
 	},
 

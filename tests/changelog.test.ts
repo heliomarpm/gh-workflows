@@ -84,5 +84,25 @@ describe('changelog action', () => {
 
 			expect(updated).toContain('## [Unreleased]\n\n### 🚀 Features\n- pendente\n\n## [v1.0.0] - 2026-01-01');
 		});
+
+		it('atualiza [Unreleased] in-place sem duplicar quando é a única seção do arquivo', () => {
+			const initial = '# 📦 Changelog\n\n## [Unreleased]\n\n### 🚀 Features\n- funcionalidade antiga\n';
+			const updated = changelog.updateContent(initial, 'Unreleased', '### 🚀 Features\n- funcionalidade nova');
+
+			const matches = updated.match(/##\s+\[Unreleased\]/g);
+			expect(matches).toHaveLength(1);
+			expect(updated).toContain('funcionalidade nova');
+			expect(updated).not.toContain('funcionalidade antiga');
+		});
+
+		it('atualiza uma versão existente in-place sem duplicar se o workflow for re-executado', () => {
+			const initial = '# 📦 Changelog\n\n## [v1.0.0 - 2026-10-10]\n\n### 🚀 Features\n- nota antiga\n';
+			const updated = changelog.updateContent(initial, 'v1.0.0 - 2026-10-10', '### 🚀 Features\n- nota nova atualizada');
+
+			const matches = updated.match(/##\s+\[v1\.0\.0/g);
+			expect(matches).toHaveLength(1);
+			expect(updated).toContain('nota nova atualizada');
+			expect(updated).not.toContain('nota antiga');
+		});
 	});
 });
