@@ -1,6 +1,21 @@
 name: "CD - Release Generator"
 
 on:
+  workflow_run:
+    workflows: ["CI - Engine Test & Build Suite"]
+    branches: ["main", "develop"]
+    types:
+      - completed
+  # push:
+  #   branches:
+  #     - main
+  #     - develop
+  workflow_dispatch:
+    inputs:
+      enable-changelog:
+        description: 'Habilita a criação do changelog'
+        required: false
+        default: 'true'
   workflow_call:
     inputs:
       main-branch:
@@ -96,7 +111,7 @@ jobs:
 
       - name: 🚀 Create Git Tag & Release
         id: release
-        uses: heliomarpm/gh-workflows/actions/release@main
+        uses: ./actions/release
         with:
           main-branch: ${{ inputs.main-branch }}
           develop-branch: ${{ inputs.develop-branch }}
@@ -109,7 +124,7 @@ jobs:
 
       - name: 📝 Update Changelog
         if: ${{ inputs.enable-changelog != false }}
-        uses: heliomarpm/gh-workflows/actions/changelog@main
+        uses: ./actions/changelog
         with:
           enable-changelog: true
           changelog-file: ${{ inputs.changelog-file }}
