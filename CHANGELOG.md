@@ -13,6 +13,7 @@ O formato é baseado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.
 - add release workflow and documentation updates ([ea05f33](https://github.com/heliomarpm/gh-workflows/commit/ea05f335075be1995be71314d935d2725369197c))
 
 ### 🐛 Bug Fixes
+- **changelog:** 🐛 suportar release-notes pré-calculadas e sincronização de push ([90826d3](https://github.com/heliomarpm/gh-workflows/commit/90826d37b37f79d1daa6e232bfec437c58401f98))
 - **release:** 🐛 corrigi fluxo de release reutilizavel ([3921b30](https://github.com/heliomarpm/gh-workflows/commit/3921b3017101e64dbc45f1505c925cb6714ca691))
 - **release:** 🐛 corrigi fluxo de release reutilizavel ([ebd3019](https://github.com/heliomarpm/gh-workflows/commit/ebd30197df9b664c15bda03c1ba59b101dc5d145))
 - **release:** 🐛 corrigi fluxo de release reutilizavel ([894b1e3](https://github.com/heliomarpm/gh-workflows/commit/894b1e316940e591a6b80fc283c650223cb47a18))
