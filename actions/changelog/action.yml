@@ -34,10 +34,6 @@ inputs:
     required: false
     type: boolean
     default: true
-  # github-token:
-  #   description: 'Token do GitHub para push do commit do changelog'
-  #   required: true
-  #   default: ''
 
 outputs:
   version:

@@ -22,7 +22,7 @@ jobs:
     name: 🚀 Release & Changelog
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write   # Permite criar e atualizar tags, commits (changelog), pushes e releases no GitHub
 
     steps:
       - name: 📌 Checkout repository
@@ -44,7 +44,6 @@ jobs:
           version: ${{ steps.release.outputs.version}}
           release-notes: ${{ steps.release.outputs.release-notes}}
           enable-changelog: ${{ inputs.enable-changelog != false }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🧾 Job Summary (Fallback em Falha)
         if: failure()

@@ -1,4 +1,3 @@
-import * as path from 'node:path';
 import semver from 'semver';
 
 import { commits, getGitHubClient, getRepoContext, git, io, logger, template } from '../core/index.js';
@@ -6,7 +5,6 @@ import { commits, getGitHubClient, getRepoContext, git, io, logger, template } f
 import type { BumpType, ParsedCommit } from '../types/index.js';
 
 export interface ReleaseOptions {
-	projectPath?: string;
 	releaseBranches?: string;
 	developBranches?: string;
 	prereleaseBranches?: string;
@@ -103,7 +101,7 @@ export const release = {
 		const rawBase = baseTag ? baseTag.replace(vPrefix, '') : '0.0.0';
 		const validBase = semver.valid(rawBase) ? rawBase : '0.0.0';
 
-		if (mode === 'prerelease' && (prereleaseIncremental || true)) {
+		if (mode === 'prerelease' && prereleaseIncremental !== false) {
 			const nextPrerelease = semver.inc(validBase, 'prerelease', prereleaseSuffix || '') || `1.0.0-${prereleaseSuffix || 'rc'}.1`;
 			return {
 				nextVersion: `${vPrefix}${nextPrerelease}`,
@@ -121,10 +119,9 @@ export const release = {
 	},
 
 	async createRelease(options: ReleaseOptions): Promise<ReleaseResult> {
-		const cwd = path.resolve(process.cwd(), options.projectPath || '.');
 		logger.info('🚀 Inicializando Release Engine...');
 
-		const currentBranch = await git.getCurrentBranch(cwd);
+		const currentBranch = await git.getCurrentBranch();
 		logger.info(`📌 Branch atual: ${currentBranch}`);
 
 		const mode = this.determineBranchMode(currentBranch, options.releaseBranches, options.prereleaseBranches, options.developBranches);
@@ -150,10 +147,10 @@ export const release = {
 			return { version: '', tag: '', hasChanges: false, releaseNotes: '' };
 		}
 
-		const latestTag = await git.getLatestTag('v*', cwd);
+		const latestTag = await git.getLatestTag('v*');
 		logger.info(`🏷️ Última tag encontrada: ${latestTag || '(nenhuma)'}`);
 
-		const rawCommits = await git.getCommitsSince(latestTag, 'HEAD', cwd);
+		const rawCommits = await git.getCommitsSince(latestTag, 'HEAD');
 		const parsedCommits = rawCommits.map(commits.parseCommitLine).filter((c): c is ParsedCommit => c !== null);
 
 		let targetVersion = options.version?.trim();
@@ -200,8 +197,8 @@ export const release = {
 		logger.info(`🏷️ Nova Git Tag / Release: ${tagName}`);
 
 		// Cria Tag anotada e envia via Git
-		await git.createAnnotatedTag(tagName, `Release ${tagName}`, cwd);
-		await git.pushTag(tagName, cwd);
+		await git.createAnnotatedTag(tagName, `Release ${tagName}`);
+		await git.pushTag(tagName);
 		logger.success(`Tag ${tagName} criada e enviada ao repositório.`);
 
 		// Cria GitHub Release oficial via Octokit
@@ -257,7 +254,6 @@ export const release = {
 
 	async run(): Promise<void> {
 		try {
-			const projectPath = io.getInput('project-path') || '.';
 			const releaseBranches = io.getInput('main-branch') || 'main,master';
 			const developBranches = io.getInput('develop-branch') || 'develop,dev,desenv';
 			const prereleaseBranches = io.getInput('prerelease-branch') || 'release-*,release/*';
@@ -269,7 +265,6 @@ export const release = {
 			const githubToken = io.getInput('github-token');
 
 			const result = await this.createRelease({
-				projectPath,
 				releaseBranches,
 				developBranches,
 				prereleaseBranches,

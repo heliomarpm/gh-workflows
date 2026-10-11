@@ -2,10 +2,6 @@ name: 'Release Engine'
 description: 'Gerador de Git Tags e GitHub Releases baseado em Conventional Commits'
 
 inputs:
-  project-path:
-    description: 'Caminho do diretório raiz do projeto contendo o repositório git'
-    required: false
-    default: '.'
   main-branch:
     description: 'Branch principal de release (ex: main, master)'
     required: false
@@ -28,13 +24,14 @@ inputs:
     required: false
     default: 'rc'
   version:
-    description: 'Versão explícita informada manualmente ou repassada pela etapa de changelog'
+    description: 'Versão explícita informada manualmente ou calculada automaticamente (semver)'
     required: false
     default: ''
   version-prefix:
     description: 'Prefixo a ser adicionado à versão (padrão: "v")'
     required: false
     default: 'v'
+    
   release-notes:
     description: 'Notas de release pré-geradas (ex: vindas do changelog). Se vazio, gera automaticamente a partir dos commits'
     required: false

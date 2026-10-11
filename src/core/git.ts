@@ -45,7 +45,7 @@ export const git = {
 			.filter((entry) => entry.length > 0);
 	},
 
-	async ensureIdentity(cwd?: string, name = 'github-actions[bot]', email = 'github-actions[bot]@users.noreply.github.com'): Promise<void> {
+	async ensureIdentity(cwd?: string, name = 'github-actions[bot]', email = '41898282+github-actions[bot]@users.noreply.github.com'): Promise<void> {
 		const nameRes = await runCommand('git', ['config', 'user.name'], { cwd, silent: true });
 		if (!nameRes.stdout || nameRes.stdout.trim() === '') {
 			await runCommand('git', ['config', 'user.name', name], { cwd, silent: true });

@@ -1,0 +1,130 @@
+name: "CD - Release Generator"
+
+on:
+  workflow_call:
+    inputs:
+      main-branch:
+        description: 'Branch principal de release (ex: main, master)'
+        required: false
+        default: 'main'
+      develop-branch:
+        description: 'Branch de desenvolvimento (ex: develop, dev)'
+        required: false
+        default: 'develop'
+      prerelease-branch:
+        description: 'Padrão de branch de pré-release (ex: "release-*", "release/*")'
+        required: false
+        default: 'release-*'
+      prerelease-incremental:
+        description: 'Se deve gerar tags incrementais de pré-release (ex: v1.0.0-rc.1) ou manter a mesma tag (v1.0.0)'
+        required: false
+        type: boolean
+        default: true
+      prerelease-suffix:
+        description: 'Sufixo da tag de pré-release quando prerelease-incremental estiver ativo (padrão: "rc")'
+        required: false
+        default: 'rc'
+      version:
+        description: 'Versão explícita informada manualmente ou calculada automaticamente (semver)'
+        required: false
+        default: ''
+      version-prefix:
+        description: 'Prefixo a ser adicionado à versão (padrão: "v")'
+        required: false
+        default: 'v'
+
+      enable-changelog:
+        description: 'Gerar e atualizar o arquivo CHANGELOG.md (opcional)'
+        type: boolean
+        required: false
+        default: true
+      changelog-file:
+        description: 'Caminho do arquivo de changelog'
+        required: false
+        default: 'CHANGELOG.md'
+      changelog-title:
+        description: 'Título do arquivo de changelog'
+        required: false
+        default: |
+          # 📦 Changelog
+
+          Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
+
+          O formato é baseado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
+      commit-message:
+        description: 'Mensagem de commit customizada para atualizações do changelog'
+        required: false
+        default: ''
+
+    secrets:
+      GH_TOKEN:
+        required: false
+        description: 'GitHub token para autenticação e criação de releases (usa GITHUB_TOKEN se omitido)'
+
+    outputs:
+      version:
+        description: 'Versão aplicada (ex: 1.0.0, 2026-10-04, etc)'
+        value: ${{ jobs.release.outputs.version }}
+      tag:
+        description: 'Git Tag criada (se houver release)'
+        value: ${{ jobs.release.outputs.tag }}
+      has-changes:
+        description: 'Se houveram commits processados'
+        value: ${{ jobs.release.outputs.has-changes }}
+      release-notes:
+        description: 'Notas de release em markdown geradas para este ciclo'
+        value: ${{ jobs.release.outputs.release-notes }}
+
+jobs:
+  release:
+    name: 🚀 Release & Changelog
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # Permite criar e atualizar tags, commits (changelog), pushes e releases no GitHub
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      tag: ${{ steps.release.outputs.tag }}
+      has-changes: ${{ steps.release.outputs.has-changes }}
+      release-notes: ${{ steps.release.outputs.release-notes }}
+
+    steps:
+      - name: 📌 Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: 🚀 Create Git Tag & Release
+        id: release
+        uses: heliomarpm/gh-workflows/actions/release@main
+        with:
+          main-branch: ${{ inputs.main-branch }}
+          develop-branch: ${{ inputs.develop-branch }}
+          prerelease-branch: ${{ inputs.prerelease-branch }}
+          prerelease-incremental: ${{ inputs.prerelease-incremental != false }}
+          prerelease-suffix: ${{ inputs.prerelease-suffix }}
+          version: ${{ inputs.version }}
+          version-prefix: ${{ inputs.version-prefix }}
+          github-token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: 📝 Update Changelog
+        if: ${{ inputs.enable-changelog != false }}
+        uses: heliomarpm/gh-workflows/actions/changelog@main
+        with:
+          enable-changelog: true
+          changelog-file: ${{ inputs.changelog-file }}
+          changelog-title: ${{ inputs.changelog-title }}
+          commit-message: ${{ inputs.commit-message }}
+          version: ${{ steps.release.outputs.version}}
+          release-notes: ${{ steps.release.outputs.release-notes}}
+
+      - name: 🧾 Job Summary (Fallback em Falha)
+        if: failure()
+        run: |
+          {
+            echo "## ❌ Falha no Workflow de Release"
+            echo ""
+            echo "- **Branch:** \`${{ github.ref_name }}\`"
+            echo "- **Status:** Ocorreu um erro durante a execução da pipeline de release."
+            echo "- Verifique os logs das etapas anteriores para detalhes do erro."
+          } >> "$GITHUB_STEP_SUMMARY"
