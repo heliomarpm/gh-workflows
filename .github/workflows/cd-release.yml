@@ -21,31 +21,37 @@ on:
     inputs:
       main-branch:
         description: 'Branch principal de release (ex: main, master)'
+        type: string
         required: false
         default: 'main'
       develop-branch:
         description: 'Branch de desenvolvimento (ex: develop, dev)'
+        type: string
         required: false
         default: 'develop'
       prerelease-branch:
         description: 'Padrão de branch de pré-release (ex: "release-*", "release/*")'
+        type: string
         required: false
         default: 'release-*'
       prerelease-incremental:
         description: 'Se deve gerar tags incrementais de pré-release (ex: v1.0.0-rc.1) ou manter a mesma tag (v1.0.0)'
-        required: false
         type: boolean
+        required: false
         default: true
       prerelease-suffix:
         description: 'Sufixo da tag de pré-release quando prerelease-incremental estiver ativo (padrão: "rc")'
+        type: string
         required: false
         default: 'rc'
       version:
         description: 'Versão explícita informada manualmente ou calculada automaticamente (semver)'
+        type: string
         required: false
         default: ''
       version-prefix:
         description: 'Prefixo a ser adicionado à versão (padrão: "v")'
+        type: string
         required: false
         default: 'v'
 
@@ -56,10 +62,12 @@ on:
         default: true
       changelog-file:
         description: 'Caminho do arquivo de changelog'
+        type: string
         required: false
         default: 'CHANGELOG.md'
       changelog-title:
         description: 'Título do arquivo de changelog'
+        type: string
         required: false
         default: |
           # 📦 Changelog
@@ -69,6 +77,7 @@ on:
           O formato é baseado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
       commit-message:
         description: 'Mensagem de commit customizada para atualizações do changelog'
+        type: string
         required: false
         default: ''
 
@@ -112,7 +121,7 @@ jobs:
 
       - name: 🚀 Create Git Tag & Release
         id: release
-        uses: heliomarpm/gh-workflows/actions/release@main
+        uses: ./actions/release
         with:
           main-branch: ${{ inputs.main-branch }}
           develop-branch: ${{ inputs.develop-branch }}
@@ -125,7 +134,7 @@ jobs:
 
       - name: 📝 Update Changelog
         if: ${{ inputs.enable-changelog != false }}
-        uses: heliomarpm/gh-workflows/actions/changelog@main
+        uses: ./actions/changelog
         with:
           enable-changelog: true
           changelog-file: ${{ inputs.changelog-file }}
