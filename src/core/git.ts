@@ -19,11 +19,26 @@ export const git = {
 			return process.env.GITHUB_REF_NAME;
 		}
 		const res = await runCommand('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { cwd, silent: true });
-		return res.exitCode === 0 && res.stdout ? res.stdout : 'main';
+		return res.exitCode === 0 && res.stdout && res.stdout !== 'HEAD' ? res.stdout : 'main';
 	},
 
 	async getLatestTag(pattern = 'v*', cwd?: string): Promise<string | null> {
 		const res = await runCommand('git', ['describe', '--tags', '--abbrev=0', '--match', pattern], { cwd, silent: true });
+		if (res.exitCode === 0 && res.stdout) {
+			return res.stdout.trim();
+		}
+		return null;
+	},
+
+	async tagPointsToHead(tag: string, cwd?: string): Promise<boolean> {
+		const tagRes = await runCommand('git', ['rev-parse', `${tag}^{commit}`], { cwd, silent: true });
+		const headRes = await runCommand('git', ['rev-parse', 'HEAD'], { cwd, silent: true });
+		return tagRes.exitCode === 0 && headRes.exitCode === 0 && tagRes.stdout.trim() === headRes.stdout.trim();
+	},
+
+	async getPreviousTag(tag?: string, cwd?: string): Promise<string | null> {
+		const ref = tag ? `${tag}^` : 'HEAD^';
+		const res = await runCommand('git', ['describe', '--tags', '--abbrev=0', '--match', 'v*', ref], { cwd, silent: true });
 		if (res.exitCode === 0 && res.stdout) {
 			return res.stdout.trim();
 		}
@@ -80,7 +95,7 @@ export const git = {
 		return res.exitCode === 0 && res.stdout.length > 0;
 	},
 
-	async commitAndPush(filePath: string, message: string, cwd?: string): Promise<boolean> {
+	async commitAndPush(filePath: string, message: string, cwd?: string, branch?: string): Promise<boolean> {
 		await this.ensureIdentity(cwd);
 
 		await runCommand('git', ['add', filePath], { cwd });
@@ -95,7 +110,16 @@ export const git = {
 			throw new Error(`Falha ao criar commit: ${commitRes.stderr}`);
 		}
 
-		const pushRes = await runCommand('git', ['push'], { cwd });
+		const targetBranch = branch || (await git.getCurrentBranch(cwd));
+
+		// Sincroniza alterações remotas com rebase antes de enviar para evitar non-fast-forward
+		const pullRes = await runCommand('git', ['pull', '--rebase', 'origin', targetBranch], { cwd, silent: true });
+		if (pullRes.exitCode !== 0) {
+			await runCommand('git', ['rebase', '--abort'], { cwd, silent: true });
+			logger.warning(`Aviso: Falha ao executar rebase com origin/${targetBranch}: ${pullRes.stderr}`);
+		}
+
+		const pushRes = await runCommand('git', ['push', 'origin', `HEAD:${targetBranch}`], { cwd });
 		if (pushRes.exitCode !== 0) {
 			throw new Error(`Falha no push: ${pushRes.stderr}`);
 		}

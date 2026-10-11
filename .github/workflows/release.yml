@@ -28,6 +28,7 @@ jobs:
       - name: 📌 Checkout repository
         uses: actions/checkout@v7
         with:
+          ref: ${{ github.head_ref || github.ref_name }}
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -41,8 +42,9 @@ jobs:
         if: ${{ inputs.enable-changelog != false }}
         uses: ./actions/changelog
         with:
-          version: ${{ steps.release.outputs.version}}
-          release-notes: ${{ steps.release.outputs.release-notes}}
+          version: ${{ steps.release.outputs.version }}
+          release-notes: ${{ steps.release.outputs.release-notes }}
+          branch: ${{ github.head_ref || github.ref_name }}
           enable-changelog: ${{ inputs.enable-changelog != false }}
 
       - name: 🧾 Job Summary (Fallback em Falha)

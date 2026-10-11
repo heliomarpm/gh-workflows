@@ -16,6 +16,7 @@ export interface ChangelogOptions {
 
 	branch?: string;
 	version?: string;
+	releaseNotes?: string;
 
 	enableChangelog?: boolean;
 	// githubToken?: string;
@@ -26,7 +27,7 @@ export const changelog = {
 	buildReleaseNotes: commits.buildReleaseNotes,
 
 	updateContent(currentChangelog: string, newSectionTitle: string, newSectionNotes: string): string {
-		const newBlock = `## [${newSectionTitle}]\n\n${newSectionNotes}`.trim();
+		let effectiveNotes = newSectionNotes.trim();
 
 		// 1. Se a seção exata ou versão já existe (ex: [Unreleased] ou [v1.0.0] ou [v1.0.0 - 2026-10-11]), substitui ela diretamente
 		const rawVersion = newSectionTitle.split(' - ')[0].trim();
@@ -34,6 +35,7 @@ export const changelog = {
 		const exactSectionRegex = new RegExp(`(^|\\n)##\\s+\\[${escapedRawVersion}(?:\\s+-\\s+[^\\]]+)?\\][\\s\\S]*?(?=\\n##\\s+\\[|$)`, 'i');
 
 		if (exactSectionRegex.test(currentChangelog)) {
+			const newBlock = `## [${newSectionTitle}]\n\n${effectiveNotes}`.trim();
 			return currentChangelog.replace(exactSectionRegex, (_match, prefix) => {
 				return `${prefix}${newBlock}\n`;
 			});
@@ -41,13 +43,21 @@ export const changelog = {
 
 		// 2. Se for uma release de nova versão e existir uma seção [Unreleased], promove [Unreleased] para a nova versão
 		const unreleasedRegex = /(^|\n)##\s+\[Unreleased\][\s\S]*?(?=\n##\s+\[|$)/i;
-		if (unreleasedRegex.test(currentChangelog)) {
+		const unreleasedMatch = currentChangelog.match(unreleasedRegex);
+		if (unreleasedMatch) {
+			// Se novas notas não foram passadas, preserva o conteúdo existente de [Unreleased]
+			if (!effectiveNotes) {
+				const existingUnreleasedContent = unreleasedMatch[0].replace(/^[\s\S]*?##\s+\[Unreleased\]\s*\n?/i, '').trim();
+				effectiveNotes = existingUnreleasedContent;
+			}
+			const newBlock = `## [${newSectionTitle}]\n\n${effectiveNotes}`.trim();
 			return currentChangelog.replace(unreleasedRegex, (_match, prefix) => {
 				return `${prefix}${newBlock}\n`;
 			});
 		}
 
 		// 3. Se existem outras seções de versão anteriores, insere antes da primeira versão
+		const newBlock = `## [${newSectionTitle}]\n\n${effectiveNotes}`.trim();
 		const firstVersionMatch = currentChangelog.match(/(?:^|\n)(##\s+\[[\s\S]*)/);
 		if (firstVersionMatch && firstVersionMatch.index !== undefined) {
 			const matchStart = firstVersionMatch.index + (firstVersionMatch[0].startsWith('\n') ? 1 : 0);
@@ -72,17 +82,32 @@ export const changelog = {
 		const currentBranch = options.branch || (await git.getCurrentBranch(cwd));
 		logger.info(`📌 Branch atual: ${currentBranch}`);
 
-		// Coleta última tag
-		const latestTag = await git.getLatestTag('v*', cwd);
-		logger.info(`🏷️ Última tag encontrada: ${latestTag || '(nenhuma)'}`);
+		let releaseNotes = options.releaseNotes?.trim() || '';
+		let parsedCommits: ParsedCommit[] = [];
 
-		const rawCommits = await git.getCommitsSince(latestTag, 'HEAD', cwd);
-		const parsedCommits = rawCommits.map(this.parseCommitLine).filter((c): c is ParsedCommit => c !== null);
+		if (releaseNotes) {
+			logger.info('📝 Utilizando release notes pré-calculadas fornecidas via input.');
+		} else {
+			// Coleta última tag
+			let latestTag = await git.getLatestTag('v*', cwd);
+			logger.info(`🏷️ Última tag encontrada: ${latestTag || '(nenhuma)'}`);
 
-		logger.info(`📊 Analisados ${parsedCommits.length} commits relevantes.`);
+			// Se a última tag já aponta exatamente para HEAD (ex: release action rodou antes ou tag acabou de ser criada),
+			// busca a tag anterior para não resultar em 0 commits
+			if (latestTag && (await git.tagPointsToHead(latestTag, cwd))) {
+				const previousTag = await git.getPreviousTag(latestTag, cwd);
+				logger.info(`ℹ️ Tag ${latestTag} aponta para HEAD. Buscando commits desde tag anterior: ${previousTag || '(nenhuma)'}`);
+				latestTag = previousTag;
+			}
 
-		const repoContext = process.env.GITHUB_REPOSITORY ? `https://github.com/${process.env.GITHUB_REPOSITORY}` : undefined;
-		const releaseNotes = this.buildReleaseNotes(parsedCommits, repoContext);
+			const rawCommits = await git.getCommitsSince(latestTag, 'HEAD', cwd);
+			parsedCommits = rawCommits.map(this.parseCommitLine).filter((c): c is ParsedCommit => c !== null);
+
+			logger.info(`📊 Analisados ${parsedCommits.length} commits relevantes.`);
+
+			const repoContext = process.env.GITHUB_REPOSITORY ? `https://github.com/${process.env.GITHUB_REPOSITORY}` : undefined;
+			releaseNotes = this.buildReleaseNotes(parsedCommits, repoContext);
+		}
 
 		// Inicializa o arquivo se não existir
 		if (!fs.existsSync(changelogPathFile)) {
@@ -110,7 +135,7 @@ export const changelog = {
 						CURRENT_BRANCH: currentBranch,
 						MODE: currentBranch,
 						COMMITS_COUNT: parsedCommits.length,
-						SINCE_LABEL: latestTag || 'início do histórico',
+						SINCE_LABEL: 'início do histórico',
 					},
 					fallbackSkipped
 				);
@@ -150,7 +175,7 @@ export const changelog = {
 		if (options.enableChangelog !== false && options.enableChangelog !== ('false' as unknown as boolean)) {
 			const commitMsg = options.commitMessage || `chore(changelog): update ${targetVersion} [skip ci]`;
 			try {
-				const commited = await git.commitAndPush(options.changelogFile || 'CHANGELOG.md', commitMsg, cwd);
+				const commited = await git.commitAndPush(options.changelogFile || 'CHANGELOG.md', commitMsg, cwd, currentBranch);
 				if (commited) {
 					logger.success('Commit do CHANGELOG.md enviado com sucesso.');
 				}
@@ -170,7 +195,7 @@ export const changelog = {
 					VERSION: targetVersion,
 					MODE: currentBranch,
 					CURRENT_BRANCH: currentBranch,
-					COMMITS_COUNT: parsedCommits.length,
+					COMMITS_COUNT: parsedCommits.length > 0 ? parsedCommits.length : options.releaseNotes ? 'pré-calculados' : 0,
 					CHANGELOG_NOTES: releaseNotes,
 				},
 				fallbackSummary
@@ -196,6 +221,7 @@ export const changelog = {
 			const changelogTitle = io.getInput('changelog-title');
 			const branch = io.getInput('branch');
 			const version = io.getInput('version');
+			const releaseNotes = io.getInput('release-notes');
 			const enableChangelogInput = io.getInput('enable-changelog');
 			const enableChangelog = enableChangelogInput ? io.getBooleanInput('enable-changelog') : true;
 			const commitMessage = io.getInput('commit-message');
@@ -206,6 +232,7 @@ export const changelog = {
 				changelogTitle,
 				branch,
 				version,
+				releaseNotes,
 				enableChangelog,
 				commitMessage,
 				// githubToken,

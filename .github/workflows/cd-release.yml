@@ -116,6 +116,7 @@ jobs:
       - name: 📌 Checkout repository
         uses: actions/checkout@v7
         with:
+          ref: ${{ github.head_ref || github.ref_name }}
           fetch-depth: 0
           token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
 
@@ -140,8 +141,9 @@ jobs:
           changelog-file: ${{ inputs.changelog-file }}
           changelog-title: ${{ inputs.changelog-title }}
           commit-message: ${{ inputs.commit-message }}
-          version: ${{ steps.release.outputs.version}}
-          release-notes: ${{ steps.release.outputs.release-notes}}
+          branch: ${{ github.head_ref || github.ref_name }}
+          version: ${{ steps.release.outputs.version }}
+          release-notes: ${{ steps.release.outputs.release-notes }}
 
       - name: 🧾 Job Summary (Fallback em Falha)
         if: failure()

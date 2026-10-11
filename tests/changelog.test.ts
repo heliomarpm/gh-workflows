@@ -1,3 +1,6 @@
+import * as fs from 'node:fs';
+import * as os from 'node:os';
+import * as path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { changelog } from '../src/actions/changelog.js';
 
@@ -103,6 +106,41 @@ describe('changelog action', () => {
 			expect(matches).toHaveLength(1);
 			expect(updated).toContain('nota nova atualizada');
 			expect(updated).not.toContain('nota antiga');
+		});
+
+		it('preserva notas existentes em [Unreleased] quando promovido para versão sem novas notas', () => {
+			const initial = '# 📦 Changelog\n\n## [Unreleased]\n\n### 🚀 Features\n- funcionalidade acumulada\n\n## [v1.0.0] - 2026-01-01\n\n- inicial\n';
+			const updated = changelog.updateContent(initial, 'v1.1.0 - 2026-10-11', '');
+
+			expect(updated).not.toContain('## [Unreleased]');
+			expect(updated).toContain('## [v1.1.0 - 2026-10-11]');
+			expect(updated).toContain('### 🚀 Features\n- funcionalidade acumulada');
+			expect(updated).toContain('## [v1.0.0] - 2026-01-01');
+		});
+	});
+
+	describe('generate with releaseNotes', () => {
+		it('utiliza release-notes pré-calculadas fornecidas via options', async () => {
+			const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'changelog-test-'));
+			const changelogPath = path.join(tmpDir, 'CHANGELOG.md');
+			fs.writeFileSync(changelogPath, '# 📦 Changelog\n\n## [Unreleased]\n\n');
+
+			const customNotes = '### 🚀 Features\n- **core:** ✨ nova funcionalidade de teste';
+			const res = await changelog.generate({
+				changelogFile: changelogPath,
+				version: 'v2.0.0',
+				releaseNotes: customNotes,
+				enableChangelog: false,
+			});
+
+			expect(res.hasChanges).toBe(true);
+			expect(res.releaseNotes).toBe(customNotes);
+
+			const written = fs.readFileSync(changelogPath, 'utf-8');
+			expect(written).toContain('## [v2.0.0');
+			expect(written).toContain(customNotes);
+
+			fs.rmSync(tmpDir, { recursive: true, force: true });
 		});
 	});
 });

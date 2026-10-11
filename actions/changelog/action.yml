@@ -24,6 +24,10 @@ inputs:
     description: 'Versão do changelog (ex: 1.0.0, 2026-10-03, ou Unreleased)'
     required: false
     default: ''
+  release-notes:
+    description: 'Notas de release pré-calculadas em formato Markdown'
+    required: false
+    default: ''
   branch:
     description: 'Nome do branch atual (detectado automaticamente pelo ambiente/git se vazio)'
     required: false
