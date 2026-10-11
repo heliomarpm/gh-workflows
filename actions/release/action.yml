@@ -32,6 +32,12 @@ inputs:
     required: false
     default: 'v'
     
+  strict-mode:
+    description: 'Falhar a pipeline caso nenhum commit convencional seja encontrado'
+    type: boolean
+    required: false
+    default: true
+    
   release-notes:
     description: 'Notas de release pré-geradas (ex: vindas do changelog). Se vazio, gera automaticamente a partir dos commits'
     required: false

@@ -16,6 +16,7 @@ on:
         description: 'Habilita a criação do changelog'
         required: false
         default: 'true'
+        
   workflow_call:
     inputs:
       main-branch:
@@ -111,7 +112,7 @@ jobs:
 
       - name: 🚀 Create Git Tag & Release
         id: release
-        uses: ./actions/release
+        uses: heliomarpm/gh-workflows/actions/release@main
         with:
           main-branch: ${{ inputs.main-branch }}
           develop-branch: ${{ inputs.develop-branch }}
@@ -124,7 +125,7 @@ jobs:
 
       - name: 📝 Update Changelog
         if: ${{ inputs.enable-changelog != false }}
-        uses: ./actions/changelog
+        uses: heliomarpm/gh-workflows/actions/changelog@main
         with:
           enable-changelog: true
           changelog-file: ${{ inputs.changelog-file }}
