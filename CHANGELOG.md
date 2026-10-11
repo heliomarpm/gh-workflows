@@ -6,25 +6,23 @@ O formato é baseado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.
 
 ## [Unreleased]
 
+### 💥 Breaking Changes
+- **changelog:** ♻️ remover opção de caminho do changelog ([032a155](https://github.com/heliomarpm/gh-workflows/commit/032a15550e90c7bec3c64826b8cc7580cf9ef05e))
+
 ### 🚀 Features
-- **changelog:** ✨ adicionar arquivos de changelog ([f3136ed](https://github.com/heliomarpm/gh-workflows/commit/f3136ed952df28cf07c51db0a9d8aa4a30445f01))
-- **changelog:** ✨ adicionar GitHub Action para geração de changelog ([1bde1f9](https://github.com/heliomarpm/gh-workflows/commit/1bde1f92f5e6eb88cb96ef7d7adb0f9cc269057e))
+- add release workflow and documentation updates ([ea05f33](https://github.com/heliomarpm/gh-workflows/commit/ea05f335075be1995be71314d935d2725369197c))
 
 ### 🐛 Bug Fixes
-- **changelog:** 🐛 corrige workflow de changelog ([0193d87](https://github.com/heliomarpm/gh-workflows/commit/0193d87aa1054f1792c5e391aeca80868d85003c))
-- **changelog:** 🐛 corrige workflow de changelog ([8e2a47f](https://github.com/heliomarpm/gh-workflows/commit/8e2a47f1ccea3fbdcef111fc3032e1d178a9014b))
-- **changelog:** 🐛 corrige workflow de changelog ([63abedd](https://github.com/heliomarpm/gh-workflows/commit/63abedd6e86ea4184042e14d5159774acbd3e170))
-- **changelog:** 🐛 corrige workflow de changelog ([b263eb4](https://github.com/heliomarpm/gh-workflows/commit/b263eb4e225299d04066f00cfdd675726a9de306))
-- **changelog:** 🐛 corrige workflow de changelog ([35540e9](https://github.com/heliomarpm/gh-workflows/commit/35540e9a29e7a461edd9ea80c531f3cf430228c4))
-- **changelog:** 🐛 corrige workflow de changelog ([bfff37b](https://github.com/heliomarpm/gh-workflows/commit/bfff37b5017439e13f088c66be15106ccc3a678c))
-- **changelog:** 🐛 corrige workflow de changelog ([c1ef3de](https://github.com/heliomarpm/gh-workflows/commit/c1ef3defd95427a9bf49d24b4ce8b1c31ca819cf))
+- **release:** 🐛 corrigi fluxo de release reutilizavel ([3921b30](https://github.com/heliomarpm/gh-workflows/commit/3921b3017101e64dbc45f1505c925cb6714ca691))
+- **release:** 🐛 corrigi fluxo de release reutilizavel ([ebd3019](https://github.com/heliomarpm/gh-workflows/commit/ebd30197df9b664c15bda03c1ba59b101dc5d145))
+- **release:** 🐛 corrigi fluxo de release reutilizavel ([894b1e3](https://github.com/heliomarpm/gh-workflows/commit/894b1e316940e591a6b80fc283c650223cb47a18))
+- **changelog:** 🐛 evitar duplicação de seções em atualizações ([7507a5f](https://github.com/heliomarpm/gh-workflows/commit/7507a5f2489fba96a3ecc67a58c4015ec18c2082))
 
-### 👷 CI & Build System
-- ⚙️ ajustar workflow CI para auto-commit de dist ([161a76a](https://github.com/heliomarpm/gh-workflows/commit/161a76a69b6b24bae5caa7a21bbbf5329e8d36da))
-- 🚀 configurar workflow de CI para validação de código ([95f7fd0](https://github.com/heliomarpm/gh-workflows/commit/95f7fd095477849cd32c9afdc35d616c9b96180e))
+### ♻️ Code Refactoring
+- **changelog:** ♻️ remover opção de caminho do changelog ([032a155](https://github.com/heliomarpm/gh-workflows/commit/032a15550e90c7bec3c64826b8cc7580cf9ef05e))
 
-### 🔧 Miscellaneous
-- **config:** ⚙️ ajustar configurações de desenvolvimento e linting ([fe308be](https://github.com/heliomarpm/gh-workflows/commit/fe308bef3d1c1c07c3e07577f3cac262cc7019dc))
+### 📝 Documentation
+- **github:** 📝 atualizar e organizar templates de issues ([759a9a4](https://github.com/heliomarpm/gh-workflows/commit/759a9a473d60213b8329aa02b1f1a198d156165d))
 
 ### 📦 Other Changes
-- Initial commit ([d2bdd98](https://github.com/heliomarpm/gh-workflows/commit/d2bdd98feaa46623a36b277d5c334bc616fdca45))
+- **workflows:** ✨ code review actions changelog e release ([778393b](https://github.com/heliomarpm/gh-workflows/commit/778393b849200d29fe344f48d526c3c5013d231a))
