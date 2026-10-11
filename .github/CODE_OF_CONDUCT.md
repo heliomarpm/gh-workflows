@@ -1,33 +1,33 @@
-# 📜 Code of Conduct
+# 📜 Código de Conduta
 
-## 📖 Our Pledge
+## 📖 Nosso Compromisso
 
-In the interest of fostering an open and welcoming environment, we pledge to make participation in our community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, gender identity, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity.
+Com o intuito de promover um ambiente aberto e acolhedor, comprometemo-nos a garantir que a participação em nossa comunidade seja uma experiência livre de assédio para todos, independentemente de idade, compleição física, deficiência visível ou invisível, etnia, identidade de gênero, nível de experiência, escolaridade, nível socioeconômico, nacionalidade, aparência pessoal, raça, religião ou identidade sexual.
 
-## 📌 Our Standards
+## 📌 Nossos Padrões
 
-Examples of behavior that contributes to creating a positive environment include:
+Exemplos de comportamentos que contribuem para criar um ambiente positivo incluem:
 
-* Using welcoming and inclusive language
-* Being respectful of differing viewpoints and experiences
-* Gracefully accepting constructive feedback
-* Showing empathy towards other community members
+* Usar linguagem inclusiva e acolhedora
+* Respeitar pontos de vista e experiências distintas
+* Aceitar críticas construtivas de maneira construtiva e empática
+* Demonstrar empatia em relação a outros membros da comunidade
 
-Unacceptable behavior includes:
+Comportamentos inaceitáveis incluem:
 
-* The use of sexualized language or imagery
-* Trolling, insulting, or derogatory comments
-* Public or private harassment
-* Publishing others’ private information without explicit permission
+* O uso de linguagem ou imagens sexualizadas
+* Comentários depreciativos, ofensivos ou ataques pessoais (trolling)
+* Assédio em ambientes públicos ou privados
+* Publicar informações privadas de terceiros sem autorização explícita
 
-## 📞 Reporting Issues
+## 📞 Reportando Problemas
 
-If you witness or experience unacceptable behavior, please report it by contacting the repository maintainers.
+Se você presenciar ou for vítima de comportamento inaceitável, por favor, reporte entrando em contato com os mantenedores do repositório.
 
-## 📑 License
+## 📑 Licença
 
-This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org/version/2/0/code_of_conduct/).
+Este Código de Conduta foi adaptado do [Contributor Covenant](https://www.contributor-covenant.org/version/2/0/code_of_conduct/), versão 2.0.
 
 ---
 
-Thank you for helping create a friendly, safe, and inclusive project space!
+Obrigado por ajudar a manter este espaço amigável, seguro e inclusivo para todos!

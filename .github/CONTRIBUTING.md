@@ -1,65 +1,65 @@
-# 🤝 Contributing Guide
+# 🤝 Guia de Contribuição
 
-Thank you for considering contributing to this project! Your help makes it better.
+Obrigado por considerar contribuir com este projeto! Sua colaboração é fundamental para torná-lo ainda melhor.
 
-## 📌 How to Contribute
+## 📌 Como Contribuir
 
-1. **Fork the repository**
-2. **Create a new branch** for your fix or feature:
+1. **Faça um Fork do repositório**
+2. **Crie uma nova branch** para sua correção ou funcionalidade:
 
    ```bash
-   git checkout -b feature/<feature-name>
+   git checkout -b feature/<nome-da-feature>
    ```
 
-3. **Commit your changes** using [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
-4. **Push to your fork** and open a Pull Request
+3. **Faça commit das alterações** utilizando o padrão [Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0/)
+4. **Envie para o seu fork (Push)** e abra um Pull Request
 
-## 📖 Contribution Rules
+## 📖 Regras de Contribuição
 
-* Follow existing code style and naming conventions.
-* Add clear and descriptive commit messages.
-* Update or add tests when applicable.
-* If adding new features, update the documentation.
+* Siga o estilo de código e convenções de nomenclatura existentes.
+* Escreva mensagens de commit claras e descritivas.
+* Atualize ou adicione testes quando aplicável.
+* Ao adicionar novos recursos, atualize a documentação correspondente.
 
 <!-- 
-## 📦 Project Scripts
+## 📦 Scripts do Projeto
 
-* `npm run test` — run unit tests
-* `npm run docs:dev` — run documentation locally
-* `npm run release:test` — dry run semantic release 
+* `npm run test` — executa testes unitários
+* `npm run docs:dev` — executa a documentação localmente
+* `npm run release:test` — simulação de semantic release 
 -->
 
-## Commit Message Format
+## Formato das Mensagens de Commit
 
-All commit messages on `main` should follow the conventional commits format. For example:
+Todas as mensagens de commit direcionadas à branch principal devem seguir o padrão Conventional Commits. Por exemplo:
 
 ```text
  feat: Allowed provided config object to extend other configs
   ^
-(type)
+(tipo)
 ```
 
-The supported types are:
+Os tipos suportados são:
 
-* No version update:
-  * **build**: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
-  * **chore**: A change that doesn't fall under any other types that affect the patch version such as removing an unused file
-  * **ci**: Changes to the CI configuration files and scripts
-  * **docs**: Documentation only changes
-  * **perf**: A code change that improves performance
-  * **refactor**: A code change that neither fixes a bug nor adds a feature
-  * **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
-  * **test**: Adding missing tests or correcting existing tests
-* Patch version update:
-  * **fix**: A bug fix
-  * **revert**: Reverts a previous commit
-* Minor version update:
-  * **feat**: A new feature
-* Major version update:
-  * **breaking** or **breaking change**: A breaking change
+* **Sem incremento de versão:**
+  * **build**: Alterações que afetam o sistema de build ou dependências externas (escopos de exemplo: composer, npm, etc.)
+  * **chore**: Alterações rotineiras que não afetam o código de produção nem a versão de patch (ex.: remover arquivos não utilizados)
+  * **ci**: Alterações nos arquivos e scripts de configuração de CI/CD
+  * **docs**: Alterações exclusivamente na documentação
+  * **perf**: Alteração de código voltada para melhoria de desempenho
+  * **refactor**: Alteração de código que não corrige bugs nem adiciona novas features
+  * **style**: Alterações que não afetam o comportamento do código (espaçamento, formatação, pontuação faltante, etc.)
+  * **test**: Adição de testes faltantes ou correção de testes existentes
+* **Atualização de versão Patch:**
+  * **fix**: Correção de bug
+  * **revert**: Reversão de um commit anterior
+* **Atualização de versão Minor:**
+  * **feat**: Nova funcionalidade ou recurso
+* **Atualização de versão Major:**
+  * **breaking** ou **breaking change**: Modificação incompatível com versões anteriores (breaking change)
 
-## 📑 License
+## 📑 Licença
 
-By contributing, you agree that your contributions will be licensed under the project’s [MIT License](./blob/main/LICENSE).
+Ao contribuir, você concorda que suas contribuições serão licenciadas sob a [Licença MIT](../LICENSE) do projeto.
 
-Thanks for helping improve this project! 🚀
+Obrigado por ajudar a melhorar este projeto! 🚀

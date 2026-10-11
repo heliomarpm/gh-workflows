@@ -1,0 +1,64 @@
+name: "✨ Sugestão de Melhoria (Feature Request)"
+description: Sugira uma nova funcionalidade, novo input de configuração ou melhoria em uma action existente.
+title: "[Feature]: "
+labels:
+  - enhancement
+  - triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por ajudar a evoluir o projeto! Compartilhe sua ideia para que possamos avaliar a viabilidade técnica e arquitetural.
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: "Escopo da Sugestão"
+      description: "Onde essa funcionalidade se encaixa?"
+      options:
+        - "Novo Workflow Reutilizável"
+        - "Melhoria em Workflow Existente (cd-pull-request, cd-release, etc.)"
+        - "Melhoria em Composite Action (actions/*)"
+        - "Novo Input ou Parâmetro de Configuração"
+        - "Nova Estratégia de Promoção de Branches"
+        - "Mecanismo de Publicação / Registry"
+        - "Outro"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problema ou Caso de Uso"
+      description: "Qual problema essa nova funcionalidade resolve? Qual cenário de uso atualmente não é atendido com facilidade?"
+      placeholder: "Atualmente, quando eu preciso de..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Solução Proposta"
+      description: "Como você imagina que essa funcionalidade deveria se comportar?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: yaml-example
+    attributes:
+      label: "Exemplo de Sintaxe Sugerida (YAML)"
+      description: "Mostre como o desenvolvedor consumidor configuraria essa opção no seu workflow."
+      placeholder: |
+        with:
+          nova-opcao: true
+      render: yaml
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternativas Consideradas"
+      description: "Você considerou ou utilizou alguma solução de contorno temporária?"
+    validations:
+      required: false

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Documentação do Projeto
+    url: https://github.com/heliomarpm/reusable-workflows#readme
+    about: Consulte a documentação e exemplos de uso antes de abrir uma issue.
+  - name: 💬 Dúvidas e Discussões
+    url: https://github.com/heliomarpm/reusable-workflows/discussions
+    about: Participe das discussões e tire dúvidas com a comunidade.
+  - name: 🌐 Sobre o Autor (Heliomar P. Marques)
+    url: https://navto.me/heliomarpm
+    about: Conecte-se e saiba mais sobre outros projetos do mantenedor.

@@ -1,0 +1,102 @@
+name: "🐛 Relato de Erro (Bug Report)"
+description: Relate uma falha ou comportamento inesperado em uma Action ou Reusable Workflow.
+title: "[Bug]: "
+labels:
+  - bug
+  - triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por relatar o problema! Por favor, preencha as informações abaixo para que possamos reproduzir e corrigir a falha o mais rápido possível.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: "Componente ou Workflow Afetado"
+      description: "Selecione o workflow reutilizável ou composite action onde ocorreu o problema."
+      options:
+        - "cd-pull-request.yml (Promoção de branches e Quality Gate)"
+        - "cd-release.yml (Geração de Release, Tag e Changelog)"
+        - "cd-semantic-release.yml (Wrapper Semantic Release)"
+        - "cd-publish.yml (Publicação Multi-Registry)"
+        - "actions/changelog (Changelog engine nativa)"
+        - "Outro / Não listado"
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: "Versão / Referência Utilizada"
+      description: "Qual versão ou tag você está utilizando no seu pipeline?"
+      placeholder: "ex: @main, @v1, @v0.4.0, commit SHA"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: runner-os
+    attributes:
+      label: "Sistema Operacional do Runner"
+      description: "Em qual ambiente o runner do GitHub Actions está executando?"
+      options:
+        - "ubuntu-latest (Linux)"
+        - "windows-latest (Windows)"
+        - "macos-latest (macOS)"
+        - "Self-hosted runner"
+        - "Container Docker customizado"
+    validations:
+      required: true
+
+  - type: textarea
+    id: workflow-snippet
+    attributes:
+      label: "Configuração do Workflow (YAML)"
+      description: "Compartilhe o trecho do arquivo YAML do seu repositório onde a action ou workflow é chamado (omita segredos e tokens sensíveis)."
+      placeholder: |
+        jobs:
+          ci:
+            uses: heliomarpm/reusable-workflows/.github/workflows/cd-pull-request.yml@main
+            with:
+              strategy: develop
+              coverage-min: 80
+      render: yaml
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Descrição do Problema"
+      description: "Descreva de forma clara e objetiva o que aconteceu e o que deveria ter acontecido."
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Logs de Execução / Mensagem de Erro"
+      description: "Cole aqui os logs relevantes do step do GitHub Actions que falhou."
+      placeholder: "::error::..."
+      render: shell
+    validations:
+      required: false
+
+  - type: input
+    id: run-url
+    attributes:
+      label: "Link da Execução no GitHub Actions (Opcional)"
+      description: "Se o seu repositório for público, compartilhe a URL da Action Run com o erro."
+      placeholder: "https://github.com/usuario/repo/actions/runs/123456789"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checkboxes
+    attributes:
+      label: "Validações Prévias"
+      options:
+        - label: "Confirmo que verifiquei se não existe uma issue aberta idêntica a este problema."
+          required: true
+        - label: "Garanti que os segredos (tokens, senhas) foram ocultados antes de enviar os logs e configurações."
+          required: true

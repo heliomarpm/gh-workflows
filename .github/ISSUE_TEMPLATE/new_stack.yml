@@ -1,0 +1,63 @@
+name: "🚀 Solicitação de Nova Stack (New Stack Request)"
+description: Sugira suporte nativo a uma nova linguagem ou ecossistema (ex: Rust, Java, Elixir, etc.).
+title: "[Stack]: Suporte para "
+labels:
+  - stack-request
+  - enhancement
+  - triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Este framework possui auto-detecção e plugins de stack nativos (Node.js, PHP, .NET, Python, Go).
+        Use este formulário para solicitar suporte nativo a uma nova linguagem ou ferramenta de compilação.
+
+  - type: input
+    id: stack-name
+    attributes:
+      label: "Nome da Linguagem / Plataforma"
+      placeholder: "ex: Rust, Java (Maven/Gradle), Elixir, Ruby"
+    validations:
+      required: true
+
+  - type: input
+    id: manifest-file
+    attributes:
+      label: "Arquivo de Manifesto para Auto-Detecção"
+      description: "Qual arquivo identifica este tipo de projeto na raiz ou subpasta?"
+      placeholder: "ex: Cargo.toml, pom.xml, build.gradle, mix.exs"
+    validations:
+      required: true
+
+  - type: input
+    id: test-command
+    attributes:
+      label: "Comando Padrão de Execução de Testes"
+      placeholder: "ex: cargo test, mvn test, ./gradlew test, mix test"
+    validations:
+      required: true
+
+  - type: input
+    id: coverage-tool
+    attributes:
+      label: "Ferramenta e Formato de Cobertura de Testes"
+      description: "Qual ferramenta gera cobertura e qual o formato do arquivo (LCOV, Cobertura XML, Clover)?"
+      placeholder: "ex: cargo-tarpaulin (cobertura.xml), JaCoCo (jacoco.xml)"
+    validations:
+      required: true
+
+  - type: input
+    id: package-registry
+    attributes:
+      label: "Registry Padrão de Pacotes (se aplicável)"
+      placeholder: "ex: crates.io, Maven Central, Hex.pm, RubyGems"
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: "Documentação e Referências Úteis"
+      description: "Envie links de documentação das GitHub Actions oficiais recomendadas para configurar este runtime (ex: actions/setup-java)."
+    validations:
+      required: false

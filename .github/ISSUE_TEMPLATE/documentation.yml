@@ -1,0 +1,49 @@
+name: "📖 Melhoria de Documentação (Documentation)"
+description: Aponte uma incorreção, falta de exemplo ou área que precise de esclarecimento na documentação.
+title: "[Docs]: "
+labels:
+  - documentation
+  - triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A documentação clara e sem ambiguidades é essencial para a biblioteca! Se você identificou algo confuso, desatualizado ou ausente, nos avise.
+
+  - type: dropdown
+    id: doc-location
+    attributes:
+      label: "Documento Afetado"
+      description: "Onde está localizada a documentação que precisa de revisão?"
+      options:
+        - "README.md principal (Exemplos rápidos e tabela de opções)"
+        - "Documentações técnicas em docs/ (ADRs, arquitetura)"
+        - "Descrição de inputs/outputs em action.yml"
+        - "Exemplos de workflows em .github/workflows/"
+        - "Outro"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-content
+    attributes:
+      label: "Trecho Atual / Link da Seção"
+      description: "Cole o trecho confuso ou envie o link da seção na documentação."
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: "Sugestão de Melhoria"
+      description: "Como essa parte poderia ser reescrita para ficar mais clara, precisa ou completa?"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: pr-intent
+    attributes:
+      label: "Contribuição"
+      options:
+        - label: "Tenho interesse em submeter um Pull Request corrigindo essa documentação."
+          required: false

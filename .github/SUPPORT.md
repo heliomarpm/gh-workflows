@@ -1,40 +1,38 @@
-# Support
-<!-- [![Portuguese](https://img.shields.io/badge/Lang-Pt--Br-green)](./pt/SUPPORT.pt.md) -->
+# Suporte
 
-> This project has a [code of conduct](./CODE_OF_CONDUCT.md).
-> By interacting with this repository, organization, or community you agree to
-> abide by its terms.
+> Este projeto adota um [Código de Conduta](./CODE_OF_CONDUCT.md).
+> Ao interagir com este repositório, organização ou comunidade, você concorda em respeitar seus termos.
 
-Hi! 👋 \
-We’re excited that you’re using this software and we’d love to help.
-To help us help you, please read through the following guidelines.
+Olá! 👋 \
+Ficamos felizes em ver você usando este projeto e teremos prazer em ajudar.
+Para que possamos oferecer o melhor suporte possível, por favor, leia as orientações abaixo.
 
-Please understand that people involved with this project often do so for fun,
-next to their day job; you are not entitled to free customer service.
+Tenha em mente que as pessoas envolvidas neste projeto frequentemente contribuem de forma voluntária,
+em paralelo às suas atividades profissionais diárias; portanto, este não é um canal de suporte técnico comercial ou sob demanda.
 
-## Contents
+## Conteúdo
 
-* [Contributions](./CONTRIBUTING.md)
-* [License](../LICENSE)
+* [Contribuições](./CONTRIBUTING.md)
+* [Licença](../LICENSE)
 
-## 📚 Documentation
+## 📚 Documentação
 
-Before asking a question, please check our documentation:
+Antes de abrir uma dúvida ou chamado, consulte a documentação do projeto:
 
 * [README.md](../README.md)
 
-## 🐛 Reporting Bugs
+## 🐛 Reportando Problemas (Bugs)
 
-If you found a bug, please open an issue in our [Issue Tracker](./issues).
-Make sure to follow the **Bug Report** template to provide all necessary details.
+Se você encontrou um bug, abra uma issue no nosso [Rastreador de Problemas (Issue Tracker)](./issues).
+Certifique-se de seguir o modelo de **Bug Report** para fornecer todas as informações necessárias à reprodução do problema.
 
-## 💡 Feature Requests
+## 💡 Sugestões de Recursos (Feature Requests)
 
-Have an idea for a new feature? We'd love to hear it!
-Please submit a request via our [Issue Tracker](./issues) using the **Feature Request** template.
+Tem uma ideia para uma nova funcionalidade? Queremos muito ouvir!
+Envie sua sugestão através do nosso [Rastreador de Problemas (Issue Tracker)](./issues) utilizando o modelo de **Feature Request**.
 
-## 💬 Community & Questions
+## 💬 Comunidade & Perguntas
 
-If you have questions or just want to chat with other users:
+Se você tiver dúvidas gerais ou quiser interagir com outros usuários:
 
-* **Discussions**: [GitHub Discussions](./discussions)
+* **Discussões**: [GitHub Discussions](./discussions)
