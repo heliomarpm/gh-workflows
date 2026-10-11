@@ -10,7 +10,6 @@ export interface ChangelogResult {
 }
 
 export interface ChangelogOptions {
-	changelogPath?: string;
 	changelogFile?: string;
 	changelogTitle?: string;
 	commitMessage?: string;
@@ -48,7 +47,7 @@ export const changelog = {
 	},
 
 	async generate(options: ChangelogOptions): Promise<ChangelogResult> {
-		const cwd = path.resolve(process.cwd(), options.changelogPath || '.');
+		const cwd = path.resolve(process.cwd(), '.');
 		const changelogFileName = options.changelogFile || 'CHANGELOG.md';
 		const changelogPathFile = path.resolve(cwd, changelogFileName);
 		const defaultTitle = '# 📦 Changelog\n\nTodas as alterações notáveis neste projeto serão documentadas neste arquivo.';
@@ -179,7 +178,6 @@ export const changelog = {
 
 	async run(): Promise<void> {
 		try {
-			const changelogPath = io.getInput('changelog-path');
 			const changelogFile = io.getInput('changelog-file');
 			const changelogTitle = io.getInput('changelog-title');
 			const branch = io.getInput('branch');
@@ -190,7 +188,6 @@ export const changelog = {
 			// const githubToken = io.getInput('github-token');
 
 			const result = await this.generate({
-				changelogPath,
 				changelogFile,
 				changelogTitle,
 				branch,
