@@ -1,0 +1,42 @@
+name: 'Rollback Engine'
+description: 'Executa rollback controlado em repositórios consumidores com suporte a múltiplas estratégias e gatilhos'
+
+inputs:
+  strategy:
+    description: 'Estratégia de rollback: revert (padrão), redeploy ou delete-tag'
+    required: false
+    default: 'revert'
+  target-version:
+    description: 'Versão/tag alvo ou commit a reverter (opcional, fallback automático para a versão anterior ou HEAD~1)'
+    required: false
+    default: ''
+  allow-destructive:
+    description: 'Permitir operações destrutivas como exclusão de tag (obrigatório para strategy: delete-tag)'
+    required: false
+    type: boolean
+    default: false
+  dry-run:
+    description: 'Simular ações sem aplicar alterações no Git ou GitHub'
+    required: false
+    type: boolean
+    default: false
+  github-token:
+    description: 'Token do GitHub com permissões contents: write e issues: write'
+    required: false
+    default: ''
+
+outputs:
+  target_version:
+    description: 'Versão/tag identificada como alvo'
+  target_commit:
+    description: 'SHA do commit identificado como alvo'
+  rollback_strategy:
+    description: 'Estratégia utilizada'
+  rollback_status:
+    description: 'Resultado da execução: success ou failed'
+  new_version:
+    description: 'Nova versão publicada (apenas para estratégia revert)'
+
+runs:
+  using: 'node24'
+  main: '../../dist/rollback/index.js'

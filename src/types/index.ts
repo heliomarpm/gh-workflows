@@ -10,3 +10,24 @@ export interface ParsedCommit {
 	isBreaking: boolean;
 	raw: string;
 }
+
+export type RollbackStrategy = 'revert' | 'redeploy' | 'delete-tag';
+export type RollbackStatus = 'success' | 'failed' | 'aborted';
+
+export interface RollbackOptions {
+	strategy: RollbackStrategy;
+	targetVersion?: string;
+	allowDestructive?: boolean;
+	dryRun?: boolean;
+	githubToken?: string;
+}
+
+export interface RollbackResult {
+	strategy: RollbackStrategy;
+	targetVersion: string;
+	targetCommit: string;
+	status: RollbackStatus;
+	newVersion?: string;
+	errorMessage?: string;
+	conflictedFiles?: string[];
+}

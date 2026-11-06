@@ -1,0 +1,37 @@
+name: '⏪ Solicitação de Rollback'
+description: 'Inicia um processo de rollback automatizado neste repositório'
+title: '[Rollback]: Reversão de versão'
+labels: ['rollback']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### 🚨 Formulário de Rollback Automatizado
+        Este formulário aciona a esteira de rollback. Apenas usuários com permissão de escrita (`write` ou `admin`) são autorizados.
+  - type: dropdown
+    id: strategy
+    attributes:
+      label: 'Estratégia de Rollback'
+      description: 'Escolha a estratégia desejada'
+      options:
+        - 'revert'
+        - 'redeploy'
+        - 'delete-tag'
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: target_version
+    attributes:
+      label: 'Versão/Tag Alvo'
+      description: 'Versão estável para a qual deseja retornar (deixe vazio para fallback automático)'
+      placeholder: 'ex: v1.2.0'
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: 'Confirmação Operacional'
+      options:
+        - label: 'Estou ciente de que esta ação reverterá código ou publicará uma nova release patch em produção.'
+          required: true

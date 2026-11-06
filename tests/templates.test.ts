@@ -44,6 +44,25 @@ describe('template.loadAndRender', () => {
 		expect(result).toContain('Changelog: Nenhuma Nova Alteração');
 	});
 
+	it('carrega e renderiza summary-rollback.md com sucesso', () => {
+		const result = template.loadAndRender('summary-rollback.md', {
+			TITLE: '⏪ Rollback Concluído com Sucesso',
+			STATUS: '🟢 **Sucesso**',
+			STRATEGY: 'revert',
+			TARGET_VERSION: 'v1.0.0',
+			TARGET_COMMIT: 'abc1234',
+			CURRENT_BRANCH: 'main',
+			EXTRA_METADATA: '| **Nova Versão** | `v1.0.2` |',
+			DETAILS: 'Reversão concluída com sucesso.',
+			INSTRUCTIONS: '',
+		});
+
+		expect(result).toContain('Rollback Concluído com Sucesso');
+		expect(result).toContain('`revert`');
+		expect(result).toContain('v1.0.0');
+		expect(result).toContain('`v1.0.2`');
+	});
+
 	it('retorna fallbackContent quando o template não existe', () => {
 		const result = template.loadAndRender('template-inexistente.md', { MSG: 'fallback ativo' }, 'Aviso: {{MSG}}');
 

@@ -125,4 +125,63 @@ export const git = {
 		}
 		return true;
 	},
+
+	async getCommitSha(ref = 'HEAD', cwd?: string): Promise<string> {
+		const res = await runCommand('git', ['rev-parse', ref], { cwd, silent: true });
+		if (res.exitCode !== 0 || !res.stdout) {
+			throw new Error(`Falha ao resolver SHA para ref '${ref}': ${res.stderr}`);
+		}
+		return res.stdout.trim();
+	},
+
+	async resolveTargetRef(targetVersion?: string, cwd?: string): Promise<string> {
+		if (targetVersion && targetVersion.trim() !== '') {
+			return targetVersion.trim();
+		}
+		const latestTag = await this.getLatestTag('v*', cwd);
+		if (latestTag) {
+			const previousTag = await this.getPreviousTag(latestTag, cwd);
+			if (previousTag) {
+				return previousTag;
+			}
+		}
+		return 'HEAD~1';
+	},
+
+	async revertRange(rangeOrCommit: string, cwd?: string): Promise<{ success: boolean; conflictedFiles: string[]; error?: string }> {
+		await this.ensureIdentity(cwd);
+		const res = await runCommand('git', ['revert', '--no-commit', rangeOrCommit], { cwd });
+		if (res.exitCode !== 0) {
+			const statusRes = await runCommand('git', ['status', '--porcelain'], { cwd, silent: true });
+			const conflictedFiles = statusRes.stdout
+				.split('\n')
+				.filter((line) => line.startsWith('UU ') || line.startsWith('AA ') || line.startsWith('UD ') || line.startsWith('DU '))
+				.map((line) => line.slice(3).trim());
+
+			await runCommand('git', ['revert', '--abort'], { cwd, silent: true });
+			return {
+				success: false,
+				conflictedFiles: conflictedFiles.length > 0 ? conflictedFiles : ['Conflito detectado durante git revert'],
+				error: res.stderr || 'Falha ao executar git revert devido a conflitos de merge.',
+			};
+		}
+		return {
+			success: true,
+			conflictedFiles: [],
+		};
+	},
+
+	async deleteLocalTag(tagName: string, cwd?: string): Promise<void> {
+		const res = await runCommand('git', ['tag', '-d', tagName], { cwd });
+		if (res.exitCode !== 0) {
+			throw new Error(`Falha ao remover tag local '${tagName}': ${res.stderr}`);
+		}
+	},
+
+	async deleteRemoteTag(tagName: string, cwd?: string): Promise<void> {
+		const res = await runCommand('git', ['push', 'origin', '--delete', tagName], { cwd });
+		if (res.exitCode !== 0) {
+			throw new Error(`Falha ao remover tag remota '${tagName}': ${res.stderr}`);
+		}
+	},
 };

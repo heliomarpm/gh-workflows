@@ -1,0 +1,104 @@
+name: "CD - Rollback Engine"
+
+on:
+  workflow_dispatch:
+    inputs:
+      strategy:
+        description: 'Estratégia de rollback (revert, redeploy, delete-tag)'
+        required: false
+        type: choice
+        options:
+          - revert
+          - redeploy
+          - delete-tag
+        default: 'revert'
+      target-version:
+        description: 'Versão/tag alvo ou commit a reverter (deixe vazio para fallback automático)'
+        required: false
+        type: string
+        default: ''
+      allow-destructive:
+        description: 'Confirmar operação destrutiva (obrigatório se strategy = delete-tag)'
+        required: false
+        type: boolean
+        default: false
+      dry-run:
+        description: 'Simular ações sem aplicar alterações no repositório'
+        required: false
+        type: boolean
+        default: false
+
+  workflow_call:
+    inputs:
+      strategy:
+        description: 'Estratégia de rollback (revert, redeploy, delete-tag)'
+        type: string
+        required: false
+        default: 'revert'
+      target-version:
+        description: 'Versão/tag alvo ou commit a reverter (deixe vazio para fallback automático)'
+        type: string
+        required: false
+        default: ''
+      allow-destructive:
+        description: 'Confirmar operação destrutiva (obrigatório se strategy = delete-tag)'
+        type: boolean
+        required: false
+        default: false
+      dry-run:
+        description: 'Simular ações sem aplicar alterações no repositório'
+        type: boolean
+        required: false
+        default: false
+    secrets:
+      GH_TOKEN:
+        required: false
+        description: 'GitHub Token com permissões de contents: write e issues: write'
+    outputs:
+      target_version:
+        description: 'Versão identificada como alvo'
+        value: ${{ jobs.rollback.outputs.target_version }}
+      target_commit:
+        description: 'SHA do commit identificado'
+        value: ${{ jobs.rollback.outputs.target_commit }}
+      rollback_strategy:
+        description: 'Estratégia executada'
+        value: ${{ jobs.rollback.outputs.rollback_strategy }}
+      rollback_status:
+        description: 'Status final da operação (success ou failed)'
+        value: ${{ jobs.rollback.outputs.rollback_status }}
+      new_version:
+        description: 'Nova versão publicada (apenas para strategy = revert)'
+        value: ${{ jobs.rollback.outputs.new_version }}
+
+jobs:
+  rollback:
+    name: ⏪ Rollback Engine
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+    outputs:
+      target_version: ${{ steps.rollback.outputs.target_version }}
+      target_commit: ${{ steps.rollback.outputs.target_commit }}
+      rollback_strategy: ${{ steps.rollback.outputs.rollback_strategy }}
+      rollback_status: ${{ steps.rollback.outputs.rollback_status }}
+      new_version: ${{ steps.rollback.outputs.new_version }}
+
+    steps:
+      - name: 📌 Checkout repository
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: ⏪ Execute Rollback
+        id: rollback
+        uses: heliomarpm/gh-workflows/actions/rollback@main
+        with:
+          strategy: ${{ inputs.strategy }}
+          target-version: ${{ inputs.target-version }}
+          allow-destructive: ${{ inputs.allow-destructive }}
+          dry-run: ${{ inputs.dry-run }}
+          github-token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
