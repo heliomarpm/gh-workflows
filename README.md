@@ -506,11 +506,10 @@ Para detalhes técnicos avançados, funcionamento dos parsers em Bash, tratament
 
 Obrigado a todos que já contribuíram para o projeto!
 
-<a href="https://github.com/heliomarpm/gh-workflows/graphs/contributors" target="_blank">
-<img src="https://contrib.nn.ci/api?repo=heliomarpm/gh-workflows&no_bot=true" />
-</a>
+[![Contribuidores](https://contrib.rocks/image?repo=heliomarpm/gh-workflows)](https://github.com/heliomarpm/gh-workflows/graphs/contributors)
 
-###### Criado com [contrib.nn](https://contrib.nn.ci/?repo=heliomarpm/gh-workflows&no_bot=true).
+###### Made with [contrib.rocks](https://contrib.rocks/image?repo=heliomarpm/gh-workflows)
+
 
 Dito isso, existem várias maneiras de contribuir para este projeto, como:
 
